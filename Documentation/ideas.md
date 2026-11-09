@@ -1,0 +1,22 @@
+- Leer datos del usuario desde Strava o Garmion (TH: Telemetry Host)-> MCP para conexión al TH.
+
+- Definir los datos q usaremos como referencias Telemetry Data:
+  - Distancia de actividad.
+  - Tiempo de actividad.
+  - Velocidad
+  - Velocidad media
+  - Velocidad máxima
+  - Pulso medio
+  - Pulso máximo
+  - Potencia (ver tipos de potencia a guardar)
+  - Temperatura
+  - Altitud
+  - Ganancia de altura
+  - Perdida de altura
+  - Ratio de marcha
+- Sesión: actividad q se hace por un deportista en una fecha y hora y q implica una serie de staos generales: track, power data, heart rate data, speed, distance, avg-speed, etc..
+- Flujo de trabajo: Conectar a TH y ver sesiones disponibles, escoger una de ellas y ver la telemetría de esa sesión.
+- Poder comparar dos sesiones
+- Identificar patrones de datos dentro de la sesiones.
+- Suffer score o algo similar q tenga en cuenta datos de la sesion para dar un valor.
+- Poder ver telemetría en tiempo real. Ver opción de q el Garmin o dispositivo envíe datos a la nube para consultarlos sobre la marcha y poder decidir cosas como si el ritmo es excesivo para el track que queda.
