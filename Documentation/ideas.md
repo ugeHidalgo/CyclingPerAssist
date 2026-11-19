@@ -1,22 +1,18 @@
-- Leer datos del usuario desde Strava o Garmion (TH: Telemetry Host)-> MCP para conexión al TH.
+# Additional Ideas
 
-- Definir los datos q usaremos como referencias Telemetry Data:
-  - Distancia de actividad.
-  - Tiempo de actividad.
-  - Velocidad
-  - Velocidad media
-  - Velocidad máxima
-  - Pulso medio
-  - Pulso máximo
-  - Potencia (ver tipos de potencia a guardar)
-  - Temperatura
-  - Altitud
-  - Ganancia de altura
-  - Perdida de altura
-  - Ratio de marcha
-- Sesión: actividad q se hace por un deportista en una fecha y hora y q implica una serie de staos generales: track, power data, heart rate data, speed, distance, avg-speed, etc..
-- Flujo de trabajo: Conectar a TH y ver sesiones disponibles, escoger una de ellas y ver la telemetría de esa sesión.
-- Poder comparar dos sesiones
-- Identificar patrones de datos dentro de la sesiones.
-- Suffer score o algo similar q tenga en cuenta datos de la sesion para dar un valor.
-- Poder ver telemetría en tiempo real. Ver opción de q el Garmin o dispositivo envíe datos a la nube para consultarlos sobre la marcha y poder decidir cosas como si el ritmo es excesivo para el track que queda.
+- Retrieve user data from Strava or Garmin through a Telemetry Host (TH), using an MCP server to connect to the TH.
+- Define the data to use as telemetry, including:
+  - Activity distance.
+  - Activity duration.
+  - Speed, average speed, and maximum speed.
+  - Average and maximum heart rate.
+  - Power (decide which power measurements to store).
+  - Temperature and altitude.
+  - Elevation gain and loss.
+  - Gear ratio.
+- Define a **session** as an activity performed by an athlete at a specific date and time, with associated data such as route, power, heart rate, speed, distance, and average speed.
+- Connect to the TH, view available sessions, select one, and inspect its telemetry.
+- Compare two sessions.
+- Identify patterns in session data.
+- Explore a Suffer Score or a similar metric that uses session data to produce a score.
+- Explore real-time telemetry. One option is for a Garmin device to send data to the cloud so it can be viewed during a ride and used to assess questions such as whether the current pace is too intense for the remaining route.
