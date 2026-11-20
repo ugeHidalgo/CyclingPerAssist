@@ -52,9 +52,7 @@ FIT is a binary activity format developed by Garmin. It can contain an activity 
 
 ### GPX
 
-GPX is an XML-based format primarily used to store GPS routes and tracks. A track can contain location points and may include timestamps and elevation. Unlike FIT, GPX does not guarantee detailed sensor measurements such as heart rate or power. Speed may need to be calculated from location and time data when it is not included.
-
-> **TODO:** Add a GPX format description document under `Documentation/Activity files definition/` and link to it here.
+GPX is an XML-based format primarily used to store GPS routes and tracks. A track can contain location points and may include timestamps and elevation. Unlike FIT, GPX does not guarantee detailed sensor measurements such as heart rate or power. Speed may need to be calculated from location and time data when it is not included. See the [GPX format description](Activity%20files%20definition/gpx_format_description_en.md).
 
 ## Example Data
 
