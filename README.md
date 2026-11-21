@@ -1,2 +1,3 @@
 # CyclingPerAssist
-Cycling Performance Assistant proyect
+
+Cycling Performance Assistant project.
