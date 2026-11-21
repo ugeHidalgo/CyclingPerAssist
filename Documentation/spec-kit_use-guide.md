@@ -50,6 +50,14 @@ Create or update `.specify/memory/constitution.md` with the principles that shou
 
 For this project, potential principles to discuss include reproducible metric calculations, keeping missing telemetry distinct from zero, separating observations from causal claims, protecting credentials and activity data, and reviewing AI-generated changes.
 
+| What belongs in the constitution | What doesn't (use another command) |
+| --- | --- |
+| Quality, testing, privacy, and simplicity principles | What the app does or a feature requirement such as displaying a speed chart (`/speckit-specify`) |
+| Cross-cutting constraints, such as performance and accessibility | The specific technology stack and architecture (`/speckit-plan`) |
+| Governance and amendment rules | The feature task list (`/speckit-tasks`) |
+
+A common mistake is to put functional requirements such as "display a speed chart" in the constitution. That belongs in a feature specification, not in a project-wide principle.
+
 ### Step 2: `/speckit-specify` - Define the Feature
 
 Describe what the selected feature must do and why it matters. Focus on the user, expected behavior, scope, and acceptance criteria; do not choose implementation technologies here. Keep the first feature small enough to implement and review independently.

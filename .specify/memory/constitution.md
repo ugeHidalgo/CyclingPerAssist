@@ -1,50 +1,38 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Cycling Performance Assistant Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Local Processing and Privacy
+Activity files may be persisted locally, but MUST be processed on the user's device. They MUST NOT be sent to third parties without the user's explicit consent. This protects potentially personal location and activity data.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Data Integrity and Explicit Units
+Original activity data MUST NOT be silently modified. Units MUST be explicit wherever values are stored, calculated, or displayed, including speed and distance. Derived or transformed values MUST remain distinguishable from the original measurements.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Missing and Corrupt Telemetry
+Missing, corrupt, or anomalous telemetry MUST be handled consistently and documented. This includes points without timestamps, pauses, and GPS jumps. Missing values MUST NOT be treated as zero or silently interpolated.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Test-First Parsing and Calculations
+Expected behavior MUST be covered by tests before implementation changes to GPX/FIT parsing or speed and cumulative-distance calculations. Tests MUST include representative activity examples. Personal activity files MUST NOT be committed unless they are anonymized and their use is authorized.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Format-Independent Domain Model
+GPX and FIT data MUST be converted through format-specific adapters into a common internal domain model. Visualization MUST depend on that model, not on the source file format.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### VI. Clear Errors
+Invalid, empty, or unsupported activity files MUST produce a clear, actionable error. Parsing and processing failures MUST NOT be silent.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### VII. Simplicity and Measurable Performance
+Implement only what the current feature specification requires. User accounts, a database, and Strava/Garmin integrations MUST NOT be added unless a feature specification requires them. Performance targets MUST be based on representative activity files and measured on the intended environment; they MUST NOT be guessed.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Performance Constraints
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+The activity size and load/render-time target are not yet established. TODO(PERFORMANCE_TARGET): Measure representative activity files and agree on the maximum point count and acceptable load/render time before adopting numeric targets.
+
+## Development Workflow
+
+Feature specifications MUST define expected units, missing/corrupt-data behavior, and error outcomes when relevant. Plans and implementations MUST preserve local processing and the format-independent domain model. Changes to parsing and calculations MUST follow the test-first principle.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+Governance rules are intentionally undefined for now. The amendment procedure, versioning policy, and compliance review expectations will be established as the project evolves.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-11-21 | **Last Amended**: 2026-11-21
