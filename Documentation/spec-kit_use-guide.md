@@ -60,7 +60,15 @@ A common mistake is to put functional requirements such as "display a speed char
 
 ### Step 2: `/speckit-specify` - Define the Feature
 
-Describe what the selected feature must do and why it matters. Focus on the user, expected behavior, scope, and acceptance criteria; do not choose implementation technologies here. Keep the first feature small enough to implement and review independently.
+Describe only what the selected feature must do and why it matters; do not specify the technology stack or architecture, which belong in `/speckit-plan`. A specification should contain:
+
+- Prioritized user stories, each independently testable.
+- Verifiable functional requirements (FR-001, FR-002, etc.).
+- Measurable, technology-agnostic success criteria.
+- Explicit edge cases and assumptions.
+- `[NEEDS CLARIFICATION]` markers wherever information is missing, rather than letting the agent invent answers. Resolve these later with `/speckit-clarify`.
+
+Keep the first feature small enough to implement and review independently.
 
 For the cycling mockup, a possible first feature is loading an activity file and displaying its speed over time. Decide whether to begin with FIT only or include GPX, and whether authentication belongs in this feature or a later one.
 
