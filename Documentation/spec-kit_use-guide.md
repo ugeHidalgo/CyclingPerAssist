@@ -1,8 +1,10 @@
 # Spec Kit Usage Guide
 
-This document records the steps for using Spec Kit in this project. The CLI installation is Step 1, followed by integrating Spec Kit into this existing project.
+This document records how to install Spec Kit, integrate it into this existing project, and use its full workflow to develop a feature. Installation and integration are one-time setup steps; the full workflow is repeated for each feature, except that the project constitution is established once.
 
-## Step 1: Install the Spec Kit CLI
+## Adding spek-kit to our project
+
+### Step 1: Install the Spec Kit CLI
 
 Spec Kit's `specify` CLI is used to set up Spec Kit for a project. The CLI requires `uv`.
 
@@ -21,7 +23,7 @@ uv tool install specify-cli
 
 Reference: [Spec Kit Quickstart](https://github.com/github/spec-kit/blob/main/docs/quickstart.md).
 
-## Step 2: Integrate Spec Kit into the Project
+### Step 2: Integrate Spec Kit into the Project
 
 From the repository root, initialize Spec Kit in the existing project with the GitHub Copilot integration:
 
@@ -37,3 +39,67 @@ specify init --here --force --integration copilot --non-interactive
 This adds shared Spec Kit templates, scripts, and workflow files under `.specify/`, plus Copilot skills under `.github/skills/`. Review the generated files before committing. The initial constitution at `.specify/memory/constitution.md` is a template and must be completed separately with `/speckit-constitution`.
 
 Reference: [Adopting Spec Kit in an Existing Project](https://github.com/github/spec-kit/blob/main/docs/how-to/existing-projects.md).
+
+## Full Path: Develop a Feature
+
+Invoke each `/speckit-*` skill separately in GitHub Copilot Chat and review its output before moving to the next step. These skills are not terminal commands.
+
+### Step 1: `/speckit-constitution` - Establish Project Principles
+
+Create or update `.specify/memory/constitution.md` with the principles that should guide all features. This step is run once for the project, before beginning the feature workflow.
+
+For this project, potential principles to discuss include reproducible metric calculations, keeping missing telemetry distinct from zero, separating observations from causal claims, protecting credentials and activity data, and reviewing AI-generated changes.
+
+### Step 2: `/speckit-specify` - Define the Feature
+
+Describe what the selected feature must do and why it matters. Focus on the user, expected behavior, scope, and acceptance criteria; do not choose implementation technologies here. Keep the first feature small enough to implement and review independently.
+
+For the cycling mockup, a possible first feature is loading an activity file and displaying its speed over time. Decide whether to begin with FIT only or include GPX, and whether authentication belongs in this feature or a later one.
+
+Example prompt to refine before use:
+
+```text
+/speckit-specify Load a local cycling Activity file and display its speed over time in a chart. Define the supported file formats and expected behavior for missing time or speed data.
+```
+
+### Step 3: `/speckit-clarify` - Resolve Ambiguities
+
+Answer targeted questions about behavior that is missing or unclear. Spec Kit incorporates the decisions into the specification. For activity loading, clarify supported formats, units, missing measurements, invalid files, and whether the file is processed in memory or persisted.
+
+Run this step before planning so the design is based on agreed requirements rather than assumptions.
+
+### Step 4: `/speckit-plan` - Design the Technical Approach
+
+Generate the technical design artifacts from the clarified specification. This is where the proposed stack and architecture belong: React, TypeScript, .NET 10, and any relevant data-processing libraries or services.
+
+Check that the plan fits the selected feature and existing repository. Avoid adding infrastructure, such as database persistence, if the feature does not need it.
+
+### Step 5: `/speckit-checklist` - Review Requirement Quality
+
+Generate a checklist for reviewing whether the specification is complete, clear, and consistent. This is a quality review of the requirements, not an implementation task list. Checklist items are reviewer-owned; marking an item complete means its requirement-quality criterion has been reviewed, not that the feature has been implemented.
+
+### Step 6: `/speckit-tasks` - Break Down the Work
+
+Generate an actionable, dependency-ordered `tasks.md` from the specification and design. Review that tasks are small, verifiable, and include appropriate tests. For example, an activity-chart feature may need tasks for file selection, parsing the chosen format, preparing time-speed values, rendering the chart, and testing with a sample file.
+
+### Step 7: `/speckit-analyze` - Check Artifact Consistency
+
+Run a read-only analysis across `spec.md`, `plan.md`, and `tasks.md`. It reports conflicts, gaps, and ambiguities; it does not fix them automatically. Correct issues in the relevant source artifact and run the analysis again before implementation.
+
+### Step 8: `/speckit-implement` - Execute the Tasks
+
+Implement the tasks in dependency order. Review the generated code and documentation, run the relevant tests, and compare the results with the acceptance criteria. Before implementation, Spec Kit checks checklist state and may ask before continuing if checklist items remain unchecked; it does not mark custom checklists complete for the reviewer.
+
+For a larger feature, implementation can be performed in phases, followed by review and testing of each phase.
+
+### Step 9: `/speckit-converge` - Verify Completion
+
+Compare the implementation with the specification, plan, and tasks. If work remains, Spec Kit appends tasks to `tasks.md`; implement those tasks and run converge again until it reports that the feature has converged.
+
+After convergence, review the final changes and submit them through a pull request to `main`.
+
+### Workflow Notes
+
+- The active feature is tracked in `.specify/feature.json`; changing Git branches alone does not select a different Spec Kit feature.
+- The project's constitution is shared across features. The specification, plan, checklists, and tasks belong to the feature being developed.
+- Run and review one skill at a time. Do not assume generated artifacts or code are correct without checking them.
