@@ -120,6 +120,12 @@ Planning also captured agreed clarifications in the feature specification. It di
 
 Generate a checklist for reviewing whether the specification is complete, clear, and consistent. This is a quality review of the requirements, not an implementation task list. Checklist items are reviewer-owned; marking an item complete means its requirement-quality criterion has been reviewed, not that the feature has been implemented.
 
+Choose a review focus when invoking the command, such as FIT import, data privacy, or chart behavior. Spec Kit uses the feature's specification and available planning artifacts to formulate questions about the requirements themselves: for example, whether error behavior and the treatment of missing speed are clearly defined. It may ask questions to narrow the checklist's scope.
+
+The expected artifact is a focused Markdown file under the feature's `checklists/` directory, for example `checklists/fit-import.md`. The command creates the file or appends items if it already exists; new items remain unchecked until the reviewer evaluates them. This is separate from the existing [`checklists/requirements.md`](../specs/001-fit-speed-chart/checklists/requirements.md), which is maintained by `/speckit-specify` and `/speckit-clarify`.
+
+This step does not implement the feature, run application tests, or create `tasks.md`. For the FIT activity feature, [`checklists/fit-speed.md`](../specs/001-fit-speed-chart/checklists/fit-speed.md) contains the custom review checklist.
+
 ### Step 6: `/speckit-tasks` - Break Down the Work
 
 Generate an actionable, dependency-ordered `tasks.md` from the specification and design. Review that tasks are small, verifiable, and include appropriate tests. For example, an activity-chart feature may need tasks for file selection, parsing the chosen format, preparing time-speed values, rendering the chart, and testing with a sample file.
