@@ -130,6 +130,12 @@ This step does not implement the feature, run application tests, or create `task
 
 Generate an actionable, dependency-ordered `tasks.md` from the specification and design. Review that tasks are small, verifiable, and include appropriate tests. For example, an activity-chart feature may need tasks for file selection, parsing the chosen format, preparing time-speed values, rendering the chart, and testing with a sample file.
 
+The command reads `spec.md` and `plan.md`, along with the constitution and any available design artifacts such as `data-model.md`, `research.md`, `contracts/`, and `quickstart.md`. It organizes work into setup, shared prerequisites, prioritized user stories, and cross-cutting work. The tasks identify dependencies, opportunities for parallel work, relevant file paths, and independent validation for each story. For this project, the task list must also respect the constitution's test-first rule for parsing and calculations.
+
+The expected artifact is `specs/001-fit-speed-chart/tasks.md`: a checklist of numbered implementation tasks, with story labels and parallel markers where applicable. It also documents dependency order, examples of parallel execution, and an incremental implementation strategy. The command reports a task summary in chat; it does not implement the feature or mark the reviewer-owned checklist as complete. Review that checklist and the generated tasks before proceeding.
+
+For the FIT activity feature, [`tasks.md`](../specs/001-fit-speed-chart/tasks.md) contains the generated implementation plan, organized by phase and user story.
+
 ### Step 7: `/speckit-analyze` - Check Artifact Consistency
 
 Run a read-only analysis across `spec.md`, `plan.md`, and `tasks.md`. It reports conflicts, gaps, and ambiguities; it does not fix them automatically. Correct issues in the relevant source artifact and run the analysis again before implementation.
