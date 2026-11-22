@@ -138,7 +138,11 @@ For the FIT activity feature, [`tasks.md`](../specs/001-fit-speed-chart/tasks.md
 
 ### Step 7: `/speckit-analyze` - Check Artifact Consistency
 
-Run a read-only analysis across `spec.md`, `plan.md`, and `tasks.md`. It reports conflicts, gaps, and ambiguities; it does not fix them automatically. Correct issues in the relevant source artifact and run the analysis again before implementation.
+Run this step after `/speckit-tasks` and before implementation. It performs a read-only consistency and quality analysis of the feature's `spec.md`, `plan.md`, and `tasks.md`; when available, it also checks the `data-model.md` and the project constitution.
+
+The analysis looks for duplicated or ambiguous requirements, underspecified behavior, conflicts with the constitution, requirements without corresponding tasks, tasks that do not map to a requirement or story, inconsistent terminology, and contradictions in task ordering. When `data-model.md` defines constrained fields, it also verifies that implementation tasks cite those fields and do not contradict their canonical constraints.
+
+**Artifact generated**: No persistent file is created or modified. The command displays a structured analysis report in the chat, with findings and recommendations, coverage tables, constitution-alignment notes, unmapped tasks, and summary metrics. It may also suggest next actions and ask whether you want remediation suggestions. The report is not itself a project artifact; update the relevant source documents manually or with the appropriate Spec Kit step, then run `/speckit-analyze` again. Do not proceed to `/speckit-implement` until critical issues are resolved.
 
 ### Step 8: `/speckit-implement` - Execute the Tasks
 
