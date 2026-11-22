@@ -44,6 +44,10 @@ Reference: [Adopting Spec Kit in an Existing Project](https://github.com/github/
 
 Invoke each `/speckit-*` skill separately in GitHub Copilot Chat and review its output before moving to the next step. These skills are not terminal commands.
 
+### Workflow and Artifacts
+
+See the [workflow and artifacts diagram](./spec-kit_artifacts_by_step.md) for the expected outputs of each step and the implementation/convergence loop.
+
 ### Step 1: `/speckit-constitution` - Establish Project Principles
 
 Create or update `.specify/memory/constitution.md` with the principles that should guide all features. This step is run once for the project, before beginning the feature workflow.
@@ -57,6 +61,8 @@ For this project, potential principles to discuss include reproducible metric ca
 | Governance and amendment rules | The feature task list (`/speckit-tasks`) |
 
 A common mistake is to put functional requirements such as "display a speed chart" in the constitution. That belongs in a feature specification, not in a project-wide principle.
+
+For this project, `/speckit-constitution` completed and ratified [`.specify/memory/constitution.md`](../.specify/memory/constitution.md). It records the project-wide principles, performance constraints, development workflow, and governance metadata. The performance target and governance rules remain to be defined.
 
 ### Step 2: `/speckit-specify` - Define the Feature
 
@@ -78,17 +84,37 @@ Example prompt to refine before use:
 /speckit-specify Load a local cycling Activity file and display its speed over time in a chart. Define the supported file formats and expected behavior for missing time or speed data.
 ```
 
+For the FIT activity feature, `/speckit-specify` created:
+
+- [`spec.md`](../specs/001-fit-speed-chart/spec.md): prioritized user stories, acceptance scenarios, requirements, edge cases, and success criteria.
+- [`checklists/requirements.md`](../specs/001-fit-speed-chart/checklists/requirements.md): the specification quality checklist used to review completeness and readiness.
+- [`.specify/feature.json`](../.specify/feature.json): the local active-feature pointer used by subsequent commands. This file is ignored by Git.
+
 ### Step 3: `/speckit-clarify` - Resolve Ambiguities
 
 Answer targeted questions about behavior that is missing or unclear. Spec Kit incorporates the decisions into the specification. For activity loading, clarify supported formats, units, missing measurements, invalid files, and whether the file is processed in memory or persisted.
 
 Run this step before planning so the design is based on agreed requirements rather than assumptions.
 
+`/speckit-clarify` records accepted answers in the active feature's `spec.md`, including a dated `Clarifications` section and updates to affected requirements or scenarios. It also revalidates the existing requirements checklist if present; it does not normally create a separate clarification file.
+
+For the FIT activity feature, the initial questions were answered during `/speckit-specify`, so `/speckit-clarify` was not run separately. Additional questions arose during planning; their answers were recorded in the [specification](../specs/001-fit-speed-chart/spec.md) and its [requirements checklist](../specs/001-fit-speed-chart/checklists/requirements.md).
+
 ### Step 4: `/speckit-plan` - Design the Technical Approach
 
-Generate the technical design artifacts from the clarified specification. This is where the proposed stack and architecture belong: React, TypeScript, .NET 10, and any relevant data-processing libraries or services.
+Generate the technical design artifacts from the clarified specification. This is where the proposed stack and architecture belong. For the FIT activity feature, the plan uses React, TypeScript, and a Docker-served client; FIT processing remains in the browser.
 
 Check that the plan fits the selected feature and existing repository. Avoid adding infrastructure, such as database persistence, if the feature does not need it.
+
+For the FIT activity feature, `/speckit-plan` produced these artifacts under [`specs/001-fit-speed-chart/`](../specs/001-fit-speed-chart/):
+
+- [`plan.md`](../specs/001-fit-speed-chart/plan.md): the technical approach, project structure, constitution checks, and testing strategy.
+- [`research.md`](../specs/001-fit-speed-chart/research.md): technology choices, rationale, and alternatives considered.
+- [`data-model.md`](../specs/001-fit-speed-chart/data-model.md): the in-memory activity data, validation rules, and state transitions.
+- [`contracts/activity-screen.md`](../specs/001-fit-speed-chart/contracts/activity-screen.md): expected screen behavior, chart semantics, and the browser/container boundary.
+- [`quickstart.md`](../specs/001-fit-speed-chart/quickstart.md): planned setup commands and end-to-end validation scenarios for after implementation.
+
+Planning also captured agreed clarifications in the feature specification. It did not implement the application or infrastructure; `/speckit-tasks` creates the implementation task list in a later step.
 
 ### Step 5: `/speckit-checklist` - Review Requirement Quality
 

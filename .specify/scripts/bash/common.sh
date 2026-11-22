@@ -164,11 +164,17 @@ get_feature_paths() {
     # Read-only callers (e.g. check-prerequisites.sh --paths-only) pass
     # --no-persist so pure path resolution never writes .specify/feature.json,
     # which would dirty the working tree or overwrite a pinned value (issue #3025).
+    # --assign sets the path variables directly in the calling shell.
     local no_persist=false
-    if [[ "${1:-}" == "--no-persist" ]]; then
-        no_persist=true
+    local assign=false
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --no-persist) no_persist=true ;;
+            --assign) assign=true ;;
+            *) echo "ERROR: Unknown get_feature_paths option: $1" >&2; return 1 ;;
+        esac
         shift
-    fi
+    done
     # SPECIFY_FEATURE_NO_PERSIST is the environment-level equivalent of --no-persist,
     # letting an orchestrator (multi-agent runner, CI matrix) guarantee that no
     # script invocation in the process tree writes .specify/feature.json, even
@@ -221,6 +227,20 @@ get_feature_paths() {
     if [[ -z "$current_branch" ]]; then
         local feature_dir_trimmed="${feature_dir%/}"
         current_branch="${feature_dir_trimmed##*/}"
+    fi
+
+    if [[ "$assign" == true ]]; then
+        REPO_ROOT="$repo_root"
+        CURRENT_BRANCH="$current_branch"
+        FEATURE_DIR="$feature_dir"
+        FEATURE_SPEC="$feature_dir/spec.md"
+        IMPL_PLAN="$feature_dir/plan.md"
+        TASKS="$feature_dir/tasks.md"
+        RESEARCH="$feature_dir/research.md"
+        DATA_MODEL="$feature_dir/data-model.md"
+        QUICKSTART="$feature_dir/quickstart.md"
+        CONTRACTS_DIR="$feature_dir/contracts"
+        return 0
     fi
 
     # Use printf '%q' to safely quote values, preventing shell injection

@@ -35,3 +35,4 @@
 - FIT files without a recorded speed value are rejected with a clear error.
 - No fixed maximum file-size cutoff is imposed in the initial feature.
 - Revisit the file-size policy in a future specification if evidence shows a limit is needed.
+- Additional data-gap, pause, elapsed-time origin, and failed-replacement rules were confirmed during planning.
