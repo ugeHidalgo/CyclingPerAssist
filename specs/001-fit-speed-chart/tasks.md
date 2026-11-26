@@ -84,8 +84,8 @@ retention independently of chart rendering.
 
 ### Tests for User Story 2
 
-- [ ] T017 [P] [US2] Write failing content-classification and rejection tests in `tests/unit/fileContent.test.ts` for GPX, unsupported content, misleading extensions, empty input, and valid FIT content; keep FIT integrity regression coverage from T011.
-- [ ] T018 [P] [US2] Write failing error and recovery tests in `tests/integration/activityErrors.test.tsx` for GPX advice, invalid/corrupt/no-speed errors, no partial result, and a clearly identified retained prior activity.
+- [X] T017 [P] [US2] Write failing content-classification and rejection tests in `tests/unit/fileContent.test.ts` for GPX, unsupported content, misleading extensions, empty input, and valid FIT content; keep FIT integrity regression coverage from T011.
+- [X] T018 [P] [US2] Write failing error and recovery tests in `tests/integration/activityErrors.test.tsx` for GPX advice, invalid/corrupt/no-speed errors, no partial result, and a clearly identified retained prior activity.
 
 ### Implementation for User Story 2
 
