@@ -1,0 +1,17 @@
+.git/
+.github/
+.specify/
+Documentation/
+Example Data/
+specs/
+tests/
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+.env*
+*.log*
+.DS_Store
+Dockerfile*
+.dockerignore
