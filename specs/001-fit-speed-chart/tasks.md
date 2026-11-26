@@ -45,7 +45,7 @@ failed replacement retention, newest-selection wins, and session disposal; the p
 accepts the shared domain types and root route; and activity state remains in memory only.
 
 - [X] T007 Define the format-independent activity and observation types in `src/domain/activity.ts`, citing [data-model.md §Selected activity](./data-model.md#selected-activity): `Selected activity.fileName`, `Selected activity.startTime`, `Selected activity.observations`, `Selected activity.pauseIntervals`, and `Selected activity.warnings`; and [data-model.md §Speed observation and gap](./data-model.md#speed-observation-and-gap): `Speed observation and gap.elapsedSeconds` and `Speed observation and gap.speedMps`.
-- [ ] T008 Write failing state-transition tests in `tests/unit/importState.test.ts` for empty/loading/ready/error, failed replacement retaining the prior activity, newest-selection wins, and session disposal.
+- [X] T008 Write failing state-transition tests in `tests/unit/importState.test.ts` for empty/loading/ready/error, failed replacement retaining the prior activity, newest-selection wins, and session disposal.
 - [ ] T009 Implement the state transitions in `src/domain/importState.ts` after T008, consistent with [data-model.md §Import state](./data-model.md#import-state); keep all activity state in memory.
 - [ ] T010 Create the single root route and application entry in `src/app/router.tsx` and `src/main.tsx`, with no authentication or backend.
 
