@@ -46,4 +46,21 @@ describe("activity timeline", () => {
       { elapsedMinutes: 13 / 60, speedKmh: 10.8 },
     ]);
   });
+
+  it("does not treat a zero recorded at the resume time as a pause sample", async () => {
+    const activity = await loadActivity("recorded-pause.fit");
+    const activityWithZeroAtResume = {
+      ...activity,
+      observations: [
+        ...activity.observations.slice(0, 1),
+        { elapsedSeconds: 13, speedMps: 0 },
+      ],
+    };
+
+    expect(buildTimeline(activityWithZeroAtResume)).toEqual([
+      { elapsedMinutes: 0, speedKmh: 7.2 },
+      { elapsedMinutes: 10 / 60, speedKmh: null },
+      { elapsedMinutes: 13 / 60, speedKmh: 0 },
+    ]);
+  });
 });

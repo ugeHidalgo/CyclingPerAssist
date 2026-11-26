@@ -111,9 +111,9 @@ of file selection.
 
 ### Implementation for User Story 3
 
-- [ ] T024 [US3] Implement timeline and unit conversion in `src/domain/timeline.ts` after T022, using `Speed observation and gap.elapsedSeconds` and `Speed observation and gap.speedMps` from [data-model.md §Speed observation and gap](./data-model.md#speed-observation-and-gap), and `Selected activity.startTime` and `Selected activity.pauseIntervals` from [data-model.md §Selected activity](./data-model.md#selected-activity).
-- [ ] T025 [US3] Implement the format-independent Recharts visualization in `src/components/SpeedChart.tsx` after T023–T024; preserve recorded zero values and render gaps without connecting across missing or paused intervals.
-- [ ] T026 [US3] Integrate the chart and omitted-data warnings in `src/app/ActivityScreen.tsx` using `Selected activity.observations` and `Selected activity.warnings` from [data-model.md §Selected activity](./data-model.md#selected-activity); retain the prior named chart after failed replacement.
+- [X] T024 [US3] Implement timeline and unit conversion in `src/domain/timeline.ts` after T022, using `Speed observation and gap.elapsedSeconds` and `Speed observation and gap.speedMps` from [data-model.md §Speed observation and gap](./data-model.md#speed-observation-and-gap), and `Selected activity.startTime` and `Selected activity.pauseIntervals` from [data-model.md §Selected activity](./data-model.md#selected-activity).
+- [X] T025 [US3] Implement the format-independent Recharts visualization in `src/components/SpeedChart.tsx` after T023–T024; preserve recorded zero values and render gaps without connecting across missing or paused intervals.
+- [X] T026 [US3] Integrate the chart and omitted-data warnings in `src/app/ActivityScreen.tsx` using `Selected activity.observations` and `Selected activity.warnings` from [data-model.md §Selected activity](./data-model.md#selected-activity); retain the prior named chart after failed replacement.
 
 **Checkpoint**: T022 and T023 precede their implementations. P3 consumes P1's activity model;
 retained-chart error integration also depends on P2.
