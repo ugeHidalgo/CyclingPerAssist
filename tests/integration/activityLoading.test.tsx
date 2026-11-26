@@ -12,6 +12,18 @@ vi.mock("../../src/adapters/fitActivity.ts", () => ({
   parseFitActivity: vi.fn(),
 }));
 
+vi.mock("../../src/components/SpeedChart.tsx", async () => {
+  const { createElement } = await import("react");
+
+  return {
+    SpeedChart: ({ activity }: { activity: SelectedActivity }) =>
+      createElement("div", {
+        role: "img",
+        "aria-label": `Speed chart for ${activity.fileName}`,
+      }),
+  };
+});
+
 async function loadActivityFile(name: string): Promise<File> {
   const bytes = await readFile(resolve(process.cwd(), "tests/fixtures", name));
   const buffer = new ArrayBuffer(bytes.byteLength);
@@ -19,14 +31,17 @@ async function loadActivityFile(name: string): Promise<File> {
   return new File([buffer], name, { type: "application/octet-stream" });
 }
 
-function createActivity(fileName: string): SelectedActivity {
+function createActivity(
+  fileName: string,
+  warnings: SelectedActivity["warnings"] = [],
+): SelectedActivity {
   return {
     fileName,
     startTime: new Date("2024-01-01T00:00:00.000Z"),
     startTimeSource: "activity",
     observations: [{ elapsedSeconds: 0, speedMps: 1.5 }],
     pauseIntervals: [],
-    warnings: [],
+    warnings,
   };
 }
 
@@ -74,6 +89,9 @@ describe("activity loading screen", () => {
 
     result.resolve(createActivity(file.name));
     expect(await screen.findByText(file.name)).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: `Speed chart for ${file.name}` }),
+    ).toBeInTheDocument();
   });
 
   it("keeps activity data local and does not persist it", async () => {
@@ -119,6 +137,37 @@ describe("activity loading screen", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent(/speed/i);
     expect(screen.getByText(previousFile.name)).toBeInTheDocument();
     expect(screen.queryByText(replacementFile.name)).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("img", {
+        name: `Speed chart for ${previousFile.name}`,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("img", {
+        name: `Speed chart for ${replacementFile.name}`,
+      }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("explains omitted timestamps and missing-speed gaps", async () => {
+    const user = userEvent.setup();
+    const file = await loadActivityFile("incomplete-data.fit");
+    vi.mocked(parseFitActivity).mockResolvedValue(
+      createActivity(file.name, [
+        { type: "omitted-timestamp-less-records", count: 1 },
+        { type: "missing-speed", count: 1 },
+      ]),
+    );
+
+    render(<ActivityScreen />);
+    await user.upload(screen.getByLabelText("Activity file"), file);
+
+    expect(
+      await screen.findByText("Omitted 1 record without timestamps."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Speed is missing from 1 record; the chart shows a gap."),
+    ).toBeInTheDocument();
   });
 
   it("ignores an older result after a newer file is selected", async () => {

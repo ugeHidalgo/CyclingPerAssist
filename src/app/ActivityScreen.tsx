@@ -2,6 +2,8 @@ import { useReducer, useRef } from "react";
 import { parseFitActivity } from "../adapters/fitActivity.ts";
 import { ActivityPicker } from "../components/ActivityPicker.tsx";
 import { ImportError } from "../components/ImportError.tsx";
+import { SpeedChart } from "../components/SpeedChart.tsx";
+import type { ActivityWarning } from "../domain/activity.ts";
 import { ActivityImportError } from "../domain/importError.ts";
 import {
   initialImportState,
@@ -14,6 +16,16 @@ function toImportError(error: unknown): ActivityImportError {
   }
 
   return new ActivityImportError("invalid", { cause: error });
+}
+
+function describeWarning(warning: ActivityWarning): string {
+  const recordLabel = warning.count === 1 ? "record" : "records";
+
+  if (warning.type === "omitted-timestamp-less-records") {
+    return `Omitted ${warning.count} ${recordLabel} without timestamps.`;
+  }
+
+  return `Speed is missing from ${warning.count} ${recordLabel}; the chart shows a gap.`;
 }
 
 export function ActivityScreen() {
@@ -65,7 +77,17 @@ export function ActivityScreen() {
       {state.status === "loading" && (
         <p role="status">Validating activity file...</p>
       )}
-      {activity && <h2>{activity.fileName}</h2>}
+      {activity && (
+        <>
+          <h2>{activity.fileName}</h2>
+          <SpeedChart activity={activity} />
+          {activity.warnings.map((warning) => (
+            <p role="status" key={warning.type}>
+              {describeWarning(warning)}
+            </p>
+          ))}
+        </>
+      )}
       {state.status === "error" && <ImportError error={state.error} />}
     </main>
   );
