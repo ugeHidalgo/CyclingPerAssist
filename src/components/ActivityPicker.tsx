@@ -19,10 +19,10 @@ export function ActivityPicker({ onFileSelected }: ActivityPickerProps) {
   }
 
   return (
-    <section>
+    <section className="activity-picker">
       <label htmlFor="activity-file">Activity file</label>
       <input id="activity-file" type="file" onChange={handleChange} />
-      <p aria-live="polite">
+      <p className="activity-picker__selection" aria-live="polite">
         {selectedFileName
           ? `Selected file: ${selectedFileName}`
           : "No file selected"}

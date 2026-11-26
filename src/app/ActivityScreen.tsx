@@ -71,18 +71,20 @@ export function ActivityScreen() {
   const activity = state.status === "empty" ? null : state.activity;
 
   return (
-    <main>
+    <main className="activity-screen">
       <h1>Cycling Performance Assistant</h1>
       <ActivityPicker onFileSelected={handleFileSelected} />
       {state.status === "loading" && (
-        <p role="status">Validating activity file...</p>
+        <p className="activity-loading" role="status">
+          Validating activity file...
+        </p>
       )}
       {activity && (
         <>
-          <h2>{activity.fileName}</h2>
+          <h2 className="activity-name">{activity.fileName}</h2>
           <SpeedChart activity={activity} />
           {activity.warnings.map((warning) => (
-            <p role="status" key={warning.type}>
+            <p className="activity-warning" role="status" key={warning.type}>
               {describeWarning(warning)}
             </p>
           ))}

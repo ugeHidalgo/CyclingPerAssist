@@ -21,5 +21,9 @@ export function ImportError({ error }: ImportErrorProps) {
   const kind =
     error instanceof ActivityImportError ? error.kind : "invalid";
 
-  return <p role="alert">{errorMessages[kind]}</p>;
+  return (
+    <p className="import-error" role="alert">
+      {errorMessages[kind]}
+    </p>
+  );
 }
