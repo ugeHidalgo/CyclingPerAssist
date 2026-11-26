@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { ActivityScreen } from "../../src/app/ActivityScreen.tsx";
 
 afterEach(cleanup);
@@ -75,6 +75,15 @@ describe("activity import errors", () => {
       await loadFixture("no-speed.fit"),
       /speed/i,
     );
+  });
+
+  it("explains recoverable file read failures", async () => {
+    const file = createFile("unreadable.fit", new ArrayBuffer(16));
+    Object.defineProperty(file, "arrayBuffer", {
+      value: vi.fn().mockRejectedValue(new Error("Operating system read error")),
+    });
+
+    await expectFileError(file, /could not be read.*try again/i);
   });
 
   it("retains and identifies the previous activity after a GPX replacement fails", async () => {
