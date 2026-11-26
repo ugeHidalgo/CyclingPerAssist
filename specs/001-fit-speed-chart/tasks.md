@@ -61,15 +61,15 @@ single active activity, then end the session and confirm it is not restored.
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Write failing FIT adapter tests in `tests/unit/fitActivity.test.ts` using `tests/fixtures/` for valid input, CRC/structural corruption, missing speed/timestamps, recorded zeros and pauses, source units, start-time fallback, and known time/speed observations; verify parser behavior for `speed` and `enhanced_speed` where fixtures support them.
-- [ ] T012 [P] [US1] Write failing activity-selection UI tests in `tests/integration/activityLoading.test.tsx` for one selected file, loading and success states, filename, local-only state, and session disposal.
+- [X] T011 [P] [US1] Write failing FIT adapter tests in `tests/unit/fitActivity.test.ts` using `tests/fixtures/` for valid input, CRC/structural corruption, missing speed/timestamps, recorded zeros and pauses, source units, start-time fallback, and known time/speed observations; verify parser behavior for `speed` and `enhanced_speed` where fixtures support them.
+- [X] T012 [P] [US1] Write failing activity-selection UI tests in `tests/integration/activityLoading.test.tsx` for one selected file, loading and success states, filename, local-only state, and session disposal.
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Implement local FIT decoding and full integrity validation in `src/adapters/fitActivity.ts` after T011; use `fit-file-parser` with checksum and strict structural validation, handle parse failures explicitly, and publish no partial result.
-- [ ] T014 [US1] Map validated FIT data to `src/domain/activity.ts` in `src/adapters/fitActivity.ts`, implementing `Selected activity.fileName`, `Selected activity.startTime`, `Selected activity.observations`, `Selected activity.pauseIntervals`, and `Selected activity.warnings` per [data-model.md §Selected activity](./data-model.md#selected-activity) and `Speed observation and gap.elapsedSeconds` and `Speed observation and gap.speedMps` per [data-model.md §Speed observation and gap](./data-model.md#speed-observation-and-gap).
-- [ ] T015 [US1] Implement the single-file picker and selected-file label in `src/components/ActivityPicker.tsx`, with a way to select unsupported files so their content can be classified.
-- [ ] T016 [US1] Integrate the picker, local `File` reading, import state, successful activity name, and session-only lifecycle in `src/app/ActivityScreen.tsx`; wire it into `src/app/router.tsx` and make T012 pass without sending activity data over the network.
+- [X] T013 [US1] Implement local FIT decoding and full integrity validation in `src/adapters/fitActivity.ts` after T011; use `fit-file-parser` with checksum and strict structural validation, handle parse failures explicitly, and publish no partial result.
+- [X] T014 [US1] Map validated FIT data to `src/domain/activity.ts` in `src/adapters/fitActivity.ts`, implementing `Selected activity.fileName`, `Selected activity.startTime`, `Selected activity.observations`, `Selected activity.pauseIntervals`, and `Selected activity.warnings` per [data-model.md §Selected activity](./data-model.md#selected-activity) and `Speed observation and gap.elapsedSeconds` and `Speed observation and gap.speedMps` per [data-model.md §Speed observation and gap](./data-model.md#speed-observation-and-gap).
+- [X] T015 [US1] Implement the single-file picker and selected-file label in `src/components/ActivityPicker.tsx`, with a way to select unsupported files so their content can be classified.
+- [X] T016 [US1] Integrate the picker, local `File` reading, import state, successful activity name, and session-only lifecycle in `src/app/ActivityScreen.tsx`; wire it into `src/app/router.tsx` and make T012 pass without sending activity data over the network.
 
 **Checkpoint**: T011 and T012 precede the relevant implementation. P1 provides an independently
 testable import increment; the speed chart itself belongs to P3.
@@ -118,18 +118,35 @@ of file selection.
 **Checkpoint**: T022 and T023 precede their implementations. P3 consumes P1's activity model;
 retained-chart error integration also depends on P2.
 
-## Phase 6: Cross-Cutting Validation and Documentation
+## Phase 6: Visual Polish and Accessibility
+
+**Purpose**: Give the completed activity screen a cohesive, light visual style inspired by
+Visual Studio Code without changing import, chart, or privacy behavior.
+
+- [ ] T027 Define and load CSS theme tokens in `src/styles/theme.css` and `src/main.tsx` for a
+  VS Code-inspired light palette, typography, spacing, and surface hierarchy; do not add a UI
+  dependency or branded assets.
+- [ ] T028 Apply the theme to `src/app/ActivityScreen.tsx`, `src/components/ActivityPicker.tsx`,
+  `src/components/ImportError.tsx`, and `src/components/SpeedChart.tsx`, polishing empty,
+  loading, success, and error states while preserving their existing semantics and behavior.
+- [ ] T029 Verify accessible presentation across the styled screen: keyboard operation, visible
+  focus, semantic labels/status/error announcements, and WCAG AA text contrast; add focused
+  accessibility checks in `tests/integration/accessibility.test.tsx`.
+
+**Checkpoint**: T027 precedes T028; complete T029 before cross-cutting validation.
+
+## Phase 7: Cross-Cutting Validation and Documentation
 
 **Purpose**: Validate the full browser/container workflow, privacy boundary, and documentation.
 
-- [ ] T027 [P] Add real-browser FIT, GPX, corrupt-file, chart, gaps, error-recovery, and rapid-selection scenarios against the Docker service in `tests/e2e/activity.spec.ts`, using `tests/fixtures/`.
-- [ ] T028 [P] Add real-browser network and storage privacy checks, session disposal, and recoverable read-failure scenarios in `tests/e2e/privacy.spec.ts`; ensure activity bytes and derived telemetry are not sent, persisted, or logged.
-- [ ] T029 [P] Document local prerequisites, fixture authorization, `npm ci`, test/build commands, Docker Compose startup and shutdown, and browser validation in `README.md`, consistent with `specs/001-fit-speed-chart/quickstart.md`.
-- [ ] T030 Run the unit/integration suite, production build, Compose startup, and Playwright scenarios documented in `specs/001-fit-speed-chart/quickstart.md`; fix any failures in the relevant implementation files before completing the task.
-- [ ] T031 Measure load/render time and resource use for authorized representative files and record the methodology and aggregate observations in `specs/001-fit-speed-chart/quickstart.md` without personal activity data; do not invent a numeric performance threshold or add a fixed file-size limit.
+- [ ] T030 [P] Add real-browser FIT, GPX, corrupt-file, chart, gaps, error-recovery, and rapid-selection scenarios against the Docker service in `tests/e2e/activity.spec.ts`, using `tests/fixtures/`.
+- [ ] T031 [P] Add real-browser network and storage privacy checks, session disposal, and recoverable read-failure scenarios in `tests/e2e/privacy.spec.ts`; ensure activity bytes and derived telemetry are not sent, persisted, or logged.
+- [ ] T032 [P] Document local prerequisites, fixture authorization, `npm ci`, test/build commands, Docker Compose startup and shutdown, and browser validation in `README.md`, consistent with `specs/001-fit-speed-chart/quickstart.md`.
+- [ ] T033 Run the unit/integration suite, production build, Compose startup, and Playwright scenarios documented in `specs/001-fit-speed-chart/quickstart.md`; fix any failures in the relevant implementation files before completing the task.
+- [ ] T034 Measure load/render time and resource use for authorized representative files and record the methodology and aggregate observations in `specs/001-fit-speed-chart/quickstart.md` without personal activity data; do not invent a numeric performance threshold or add a fixed file-size limit.
 
-**Checkpoint**: T027–T029 follow completion of the relevant stories; T030 follows T027–T029;
-T031 follows a working application and can use the same local setup.
+**Checkpoint**: T030–T032 follow the stories and visual phase; T033 follows T030–T032;
+T034 follows a working application and can use the same local setup.
 
 ## Dependencies & Execution Order
 
@@ -138,7 +155,7 @@ T031 follows a working application and can use the same local setup.
 ```text
 Phase 1 Setup -> Phase 2 Foundational -> US1 (P1) -> US2 (P2) -> US3 (P3)
                                          \-------------------------> US3 core
-US1 + US2 + US3 -> Phase 6 cross-cutting validation
+US1 + US2 + US3 -> Phase 6 visual polish -> Phase 7 cross-cutting validation
 ```
 
 - US2's classification and recovery can be tested independently with a ready-state fixture,
@@ -146,7 +163,8 @@ US1 + US2 + US3 -> Phase 6 cross-cutting validation
 - US3's timeline and chart can be tested with a domain-model fixture after T007. Its integrated
   screen depends on US1; the failed-replacement chart scenario also depends on US2.
 - UI integration tasks T016, T021, and T026 edit `src/app/ActivityScreen.tsx` and must run
-  sequentially. Adapter changes T013, T014, and T019 also run sequentially.
+  sequentially; visual styling T028 follows them. Adapter changes T013, T014, and T019 also
+  run sequentially.
 - Within each story, finish the relevant failing tests before implementing the tested behavior.
 - Checklists remain reviewer-owned; review their checkbox state before implementation.
   `/speckit-implement` reports their status but does not modify checklist files.
@@ -157,7 +175,7 @@ US1 + US2 + US3 -> Phase 6 cross-cutting validation
 - After setup and the foundation, T011 and T012 can be written in parallel.
 - After the foundation, T017/T018 and T022/T023 can be authored against fixtures independently
   of one another; story integrations still follow the dependency order above.
-- After all story integrations, T027, T028, and T029 can run in parallel in separate files.
+- After visual polish, T030, T031, and T032 can run in parallel in separate files.
 
 ## Parallel Examples
 
@@ -185,6 +203,7 @@ the finished chart into the screen after US1 and US2.
 2. Deliver and validate US1 as the smallest import-only increment; it does not yet satisfy the
    full user goal of viewing a chart.
 3. Add US2's understandable failures and recovery, then US3's chart and telemetry semantics.
-4. Run the full browser/container, privacy, and performance-measurement checks.
-5. Review the final implementation against the specification and run `/speckit-converge` after
+4. Apply the visual theme and accessibility refinements after the functional screen is complete.
+5. Run the full browser/container, privacy, and performance-measurement checks.
+6. Review the final implementation against the specification and run `/speckit-converge` after
    `/speckit-implement`; do not treat unchecked reviewer-owned checklist items as approved.
