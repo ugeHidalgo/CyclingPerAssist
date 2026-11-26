@@ -148,6 +148,17 @@ Visual Studio Code without changing import, chart, or privacy behavior.
 **Checkpoint**: T030–T032 follow the stories and visual phase; T033 follows T030–T032;
 T034 follows a working application and can use the same local setup.
 
+## Phase 8: Miscellanea
+
+**Purpose**: Track small user-requested refinements that fall outside the completed user stories.
+Keep future miscellaneous refinements in the same task as additional explicit acceptance criteria.
+
+- [ ] T035 Implement an accessible, dismissible modal dialog for import errors in `src/components/ImportError.tsx` and integrate it in `src/app/ActivityScreen.tsx`; show the specific current error, including unsupported GPX and FIT files without speed, and cover initial failures and failed replacements in `tests/integration/activityErrors.test.tsx` while retaining the prior activity name and chart. Add future small user-requested refinements to this same task as explicit acceptance criteria.
+
+**Checkpoint**: Every import failure opens a dismissible dialog with the relevant message;
+a failed replacement retains the previous activity and chart. Record later miscellaneous
+refinements under T035.
+
 ## Dependencies & Execution Order
 
 ### Phase Dependencies
@@ -156,6 +167,7 @@ T034 follows a working application and can use the same local setup.
 Phase 1 Setup -> Phase 2 Foundational -> US1 (P1) -> US2 (P2) -> US3 (P3)
                                          \-------------------------> US3 core
 US1 + US2 + US3 -> Phase 6 visual polish -> Phase 7 cross-cutting validation
+Phase 7 cross-cutting validation -> Phase 8 Miscellanea
 ```
 
 - US2's classification and recovery can be tested independently with a ready-state fixture,
@@ -176,6 +188,8 @@ US1 + US2 + US3 -> Phase 6 visual polish -> Phase 7 cross-cutting validation
 - After the foundation, T017/T018 and T022/T023 can be authored against fixtures independently
   of one another; story integrations still follow the dependency order above.
 - After visual polish, T030, T031, and T032 can run in parallel in separate files.
+- Phase 8 currently contains only T035; its error-dialog and screen integration work is
+  sequential because it touches the same error presentation and activity screen.
 
 ## Parallel Examples
 
@@ -207,3 +221,5 @@ the finished chart into the screen after US1 and US2.
 5. Run the full browser/container, privacy, and performance-measurement checks.
 6. Review the final implementation against the specification and run `/speckit-converge` after
    `/speckit-implement`; do not treat unchecked reviewer-owned checklist items as approved.
+7. Complete Phase 8's miscellaneous user-requested refinements, extending T035 with explicit
+   acceptance criteria as additional small changes are requested.
