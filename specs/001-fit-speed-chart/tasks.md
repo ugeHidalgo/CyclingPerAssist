@@ -23,12 +23,12 @@ test, build, and browser-test scripts and their configuration are present; `dock
 config -q` accepts the Compose configuration; and fixture provenance and authorization
 requirements are documented. No feature behavior is expected from this phase.
 
-- [ ] T001 Create `package.json` and `package-lock.json` for React 19, TypeScript, Vite, React Router, `fit-file-parser`, Recharts, Vitest, Testing Library, and Playwright; define non-watch `test`, `build`, and `test:e2e` scripts using compatible versions.
-- [ ] T002 [P] Configure the TypeScript and Vite browser build in `tsconfig.json`, `vite.config.ts`, and `index.html`, including browser `buffer` resolution if needed.
-- [ ] T003 [P] Configure Vitest and Testing Library setup in `vitest.config.ts` and `tests/setup.ts`.
-- [ ] T004 [P] Define a multi-stage static frontend build in `Dockerfile`, static-server routing in `nginx.conf`, a localhost-only `127.0.0.1:8080` service in `compose.yaml`, and build exclusions in `.dockerignore`.
-- [ ] T005 [P] Configure Playwright to run against the Compose service and write browser-test configuration in `playwright.config.ts`.
-- [ ] T006 [P] Prepare authorized, anonymized representative FIT and GPX examples and documented expected observations in `tests/fixtures/README.md` and `tests/fixtures/`; include valid, no-speed, incomplete-data, zero-speed, and pause cases. If suitable files cannot be obtained, stop and request them rather than use personal data without authorization and anonymization.
+- [X] T001 Create `package.json` and `package-lock.json` for React 19, TypeScript, Vite, React Router, `fit-file-parser`, Recharts, Vitest, Testing Library, and Playwright; define non-watch `test`, `build`, and `test:e2e` scripts using compatible versions.
+- [X] T002 [P] Configure the TypeScript and Vite browser build in `tsconfig.json`, `vite.config.ts`, and `index.html`, including browser `buffer` resolution if needed.
+- [X] T003 [P] Configure Vitest and Testing Library setup in `vitest.config.ts` and `tests/setup.ts`.
+- [X] T004 [P] Define a multi-stage static frontend build in `Dockerfile`, static-server routing in `nginx.conf`, a localhost-only `127.0.0.1:8080` service in `compose.yaml`, and build exclusions in `.dockerignore`.
+- [X] T005 [P] Configure Playwright to run against the Compose service and write browser-test configuration in `playwright.config.ts`.
+- [X] T006 [P] Prepare authorized, anonymized representative FIT and GPX examples and documented expected observations in `tests/fixtures/README.md` and `tests/fixtures/`; include valid, no-speed, incomplete-data, zero-speed, and pause cases. If suitable files cannot be obtained, stop and request them rather than use personal data without authorization and anonymization.
 
 **Checkpoint**: T001 precedes T002–T005. The remaining setup tasks can proceed independently;
 fixtures are available before tests that depend on them. Phase 1 is complete when its exit
@@ -44,7 +44,7 @@ enabler, not a user-facing story.
 failed replacement retention, newest-selection wins, and session disposal; the production build
 accepts the shared domain types and root route; and activity state remains in memory only.
 
-- [ ] T007 Define the format-independent activity and observation types in `src/domain/activity.ts`, citing [data-model.md §Selected activity](./data-model.md#selected-activity): `Selected activity.fileName`, `Selected activity.startTime`, `Selected activity.observations`, `Selected activity.pauseIntervals`, and `Selected activity.warnings`; and [data-model.md §Speed observation and gap](./data-model.md#speed-observation-and-gap): `Speed observation and gap.elapsedSeconds` and `Speed observation and gap.speedMps`.
+- [X] T007 Define the format-independent activity and observation types in `src/domain/activity.ts`, citing [data-model.md §Selected activity](./data-model.md#selected-activity): `Selected activity.fileName`, `Selected activity.startTime`, `Selected activity.observations`, `Selected activity.pauseIntervals`, and `Selected activity.warnings`; and [data-model.md §Speed observation and gap](./data-model.md#speed-observation-and-gap): `Speed observation and gap.elapsedSeconds` and `Speed observation and gap.speedMps`.
 - [ ] T008 Write failing state-transition tests in `tests/unit/importState.test.ts` for empty/loading/ready/error, failed replacement retaining the prior activity, newest-selection wins, and session disposal.
 - [ ] T009 Implement the state transitions in `src/domain/importState.ts` after T008, consistent with [data-model.md §Import state](./data-model.md#import-state); keep all activity state in memory.
 - [ ] T010 Create the single root route and application entry in `src/app/router.tsx` and `src/main.tsx`, with no authentication or backend.
@@ -148,8 +148,8 @@ US1 + US2 + US3 -> Phase 6 cross-cutting validation
 - UI integration tasks T016, T021, and T026 edit `src/app/ActivityScreen.tsx` and must run
   sequentially. Adapter changes T013, T014, and T019 also run sequentially.
 - Within each story, finish the relevant failing tests before implementing the tested behavior.
-- The custom requirements checklist remains reviewer-owned and currently unchecked. Review it
-  before implementation; `/speckit-implement` checks its status and does not mark it complete.
+- Checklists remain reviewer-owned; review their checkbox state before implementation.
+  `/speckit-implement` reports their status but does not modify checklist files.
 
 ### Parallel Opportunities
 

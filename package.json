@@ -1,0 +1,49 @@
+{
+  "name": "cycling-performance-assistant",
+  "version": "1.0.0",
+  "description": "Cycling Performance Assistant project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest run",
+    "build": "tsc --noEmit && vite build",
+    "test:e2e": "playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ugeHidalgo/CyclingPerAssist.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ugeHidalgo/CyclingPerAssist/issues"
+  },
+  "homepage": "https://github.com/ugeHidalgo/CyclingPerAssist#readme",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "fit-file-parser": "^6.2.10",
+    "react": "^19.2.9",
+    "react-dom": "^19.2.9",
+    "react-router-dom": "^7.18.7",
+    "recharts": "^3.11.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^8.0.0",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.13",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.3.0",
+    "jsdom": "^28.1.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.2"
+  }
+}
