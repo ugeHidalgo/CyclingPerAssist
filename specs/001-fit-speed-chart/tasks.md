@@ -106,8 +106,8 @@ of file selection.
 
 ### Tests for User Story 3
 
-- [ ] T022 [P] [US3] Write failing timeline and conversion tests in `tests/unit/timeline.test.ts` for minutes, m/s to km/h, start-time fallback, exact zero, timestamp-less records, missing speed, and pause gaps using known authorized fixture observations.
-- [ ] T023 [P] [US3] Write failing chart contract tests in `tests/integration/speedChart.test.tsx` for the numeric elapsed-time axis, visible minutes/km/h units, recorded zeros, and disconnected missing-speed/pause gaps using a domain-model fixture.
+- [X] T022 [P] [US3] Write failing timeline and conversion tests in `tests/unit/timeline.test.ts` for minutes, m/s to km/h, start-time fallback, exact zero, timestamp-less records, missing speed, and pause gaps using known authorized fixture observations.
+- [X] T023 [P] [US3] Write failing chart contract tests in `tests/integration/speedChart.test.tsx` for the numeric elapsed-time axis, visible minutes/km/h units, recorded zeros, and disconnected missing-speed/pause gaps using a domain-model fixture.
 
 ### Implementation for User Story 3
 
