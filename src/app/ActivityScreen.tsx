@@ -1,19 +1,19 @@
 import { useReducer, useRef } from "react";
 import { parseFitActivity } from "../adapters/fitActivity.ts";
 import { ActivityPicker } from "../components/ActivityPicker.tsx";
+import { ImportError } from "../components/ImportError.tsx";
+import { ActivityImportError } from "../domain/importError.ts";
 import {
   initialImportState,
   transitionImportState,
 } from "../domain/importState.ts";
 
-function toImportError(error: unknown): Error {
-  if (error instanceof Error) {
+function toImportError(error: unknown): ActivityImportError {
+  if (error instanceof ActivityImportError) {
     return error;
   }
 
-  return new Error("Unable to read or validate the selected activity file.", {
-    cause: error,
-  });
+  return new ActivityImportError("invalid", { cause: error });
 }
 
 export function ActivityScreen() {
@@ -32,8 +32,19 @@ export function ActivityScreen() {
   }
 
   async function importFile(file: File, currentRequestId: number) {
+    let data: ArrayBuffer;
     try {
-      const data = await file.arrayBuffer();
+      data = await file.arrayBuffer();
+    } catch (error) {
+      dispatch({
+        type: "failure",
+        requestId: currentRequestId,
+        error: new ActivityImportError("read", { cause: error }),
+      });
+      return;
+    }
+
+    try {
       const activity = await parseFitActivity(file.name, data);
       dispatch({ type: "success", requestId: currentRequestId, activity });
     } catch (error) {
@@ -55,7 +66,7 @@ export function ActivityScreen() {
         <p role="status">Validating activity file...</p>
       )}
       {activity && <h2>{activity.fileName}</h2>}
-      {state.status === "error" && <p role="alert">{state.error.message}</p>}
+      {state.status === "error" && <ImportError error={state.error} />}
     </main>
   );
 }

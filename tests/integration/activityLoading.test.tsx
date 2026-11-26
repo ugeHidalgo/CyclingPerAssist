@@ -4,6 +4,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SelectedActivity } from "../../src/domain/activity.ts";
+import { ActivityImportError } from "../../src/domain/importError.ts";
 import { parseFitActivity } from "../../src/adapters/fitActivity.ts";
 import { ActivityScreen } from "../../src/app/ActivityScreen.tsx";
 
@@ -101,7 +102,7 @@ describe("activity loading screen", () => {
     const replacementFile = await loadActivityFile("no-speed.fit");
     vi.mocked(parseFitActivity)
       .mockResolvedValueOnce(createActivity(previousFile.name))
-      .mockRejectedValueOnce(new Error("FIT activity has no usable speed."));
+      .mockRejectedValueOnce(new ActivityImportError("missing-speed"));
 
     render(<ActivityScreen />);
     await user.upload(
@@ -115,7 +116,7 @@ describe("activity loading screen", () => {
       replacementFile,
     );
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(/usable speed/i);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/speed/i);
     expect(screen.getByText(previousFile.name)).toBeInTheDocument();
     expect(screen.queryByText(replacementFile.name)).not.toBeInTheDocument();
   });

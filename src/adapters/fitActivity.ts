@@ -4,6 +4,8 @@ import type {
   SelectedActivity,
   SpeedObservation,
 } from "../domain/activity.ts";
+import { ActivityImportError } from "../domain/importError.ts";
+import { classifyFileContent } from "./fileContent.ts";
 
 export type DecodedFitActivity = ParsedFit;
 type ParsedRecord = NonNullable<
@@ -21,12 +23,9 @@ const TIMER_STOP_TYPES = new Set([
 ]);
 const TIMER_START_TYPES = new Set(["start", "begin_depreciated"]);
 
-export class FitActivityDecodeError extends Error {
+export class FitActivityDecodeError extends ActivityImportError {
   constructor(cause: unknown) {
-    super(
-      "The selected file is not a valid FIT activity or failed integrity validation.",
-      { cause },
-    );
+    super("corrupt", { cause });
     this.name = "FitActivityDecodeError";
   }
 }
@@ -103,6 +102,17 @@ export async function parseFitActivity(
   fileName: string,
   data: ArrayBuffer,
 ): Promise<SelectedActivity> {
+  const contentKind = classifyFileContent(data);
+  if (contentKind === "gpx") {
+    throw new ActivityImportError("gpx");
+  }
+  if (contentKind === "empty") {
+    throw new ActivityImportError("empty");
+  }
+  if (contentKind === "unsupported") {
+    throw new ActivityImportError("unsupported");
+  }
+
   const decoded = await decodeFitActivity(data);
   const records = decoded.messages?.record ?? [];
   const firstRecordTimestamp = records.find((record) =>
@@ -116,9 +126,7 @@ export async function parseFitActivity(
   const startTime = sessionStartTime ?? firstRecordTimestamp;
 
   if (!startTime) {
-    throw new Error(
-      "The FIT activity has no usable timestamped speed observations.",
-    );
+    throw new ActivityImportError("invalid");
   }
 
   const warnings: ActivityWarning[] = [];
@@ -144,9 +152,7 @@ export async function parseFitActivity(
   }
 
   if (!observations.some((observation) => observation.speedMps !== null)) {
-    throw new Error(
-      "The FIT activity has no usable timestamped speed observations.",
-    );
+    throw new ActivityImportError("missing-speed");
   }
 
   if (omittedTimestampCount > 0) {

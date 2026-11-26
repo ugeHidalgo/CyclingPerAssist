@@ -84,14 +84,14 @@ retention independently of chart rendering.
 
 ### Tests for User Story 2
 
-- [ ] T017 [P] [US2] Write failing content-classification and rejection tests in `tests/unit/fileContent.test.ts` for GPX, unsupported content, misleading extensions, empty input, and valid FIT content; keep FIT integrity regression coverage from T011.
-- [ ] T018 [P] [US2] Write failing error and recovery tests in `tests/integration/activityErrors.test.tsx` for GPX advice, invalid/corrupt/no-speed errors, no partial result, and a clearly identified retained prior activity.
+- [X] T017 [P] [US2] Write failing content-classification and rejection tests in `tests/unit/fileContent.test.ts` for GPX, unsupported content, misleading extensions, empty input, and valid FIT content; keep FIT integrity regression coverage from T011.
+- [X] T018 [P] [US2] Write failing error and recovery tests in `tests/integration/activityErrors.test.tsx` for GPX advice, invalid/corrupt/no-speed errors, no partial result, and a clearly identified retained prior activity.
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] Implement content-based FIT/GPX classification and unsupported-file rejection in `src/adapters/fileContent.ts`; integrate it with `src/adapters/fitActivity.ts` after T017 without implementing GPX import.
-- [ ] T020 [US2] Implement clear messages for GPX, empty, corrupt, unsupported, missing-speed, and recoverable read failures in `src/components/ImportError.tsx`.
-- [ ] T021 [US2] Connect classification and error presentation in `src/app/ActivityScreen.tsx`, retaining and identifying the previous successful activity while rejecting incomplete results; make T018 pass.
+- [X] T019 [US2] Implement content-based FIT/GPX classification and unsupported-file rejection in `src/adapters/fileContent.ts`; integrate it with `src/adapters/fitActivity.ts` after T017 without implementing GPX import.
+- [X] T020 [US2] Implement clear messages for GPX, empty, corrupt, unsupported, missing-speed, and recoverable read failures in `src/components/ImportError.tsx`.
+- [X] T021 [US2] Connect classification and error presentation in `src/app/ActivityScreen.tsx`, retaining and identifying the previous successful activity while rejecting incomplete results; make T018 pass.
 
 **Checkpoint**: T017 precedes T019; T018 precedes T020–T021. T019–T021 integrate with P1
 components rather than assuming P2 can be deployed without an import flow.
