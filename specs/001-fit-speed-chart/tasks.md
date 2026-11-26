@@ -61,8 +61,8 @@ single active activity, then end the session and confirm it is not restored.
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Write failing FIT adapter tests in `tests/unit/fitActivity.test.ts` using `tests/fixtures/` for valid input, CRC/structural corruption, missing speed/timestamps, recorded zeros and pauses, source units, start-time fallback, and known time/speed observations; verify parser behavior for `speed` and `enhanced_speed` where fixtures support them.
-- [ ] T012 [P] [US1] Write failing activity-selection UI tests in `tests/integration/activityLoading.test.tsx` for one selected file, loading and success states, filename, local-only state, and session disposal.
+- [X] T011 [P] [US1] Write failing FIT adapter tests in `tests/unit/fitActivity.test.ts` using `tests/fixtures/` for valid input, CRC/structural corruption, missing speed/timestamps, recorded zeros and pauses, source units, start-time fallback, and known time/speed observations; verify parser behavior for `speed` and `enhanced_speed` where fixtures support them.
+- [X] T012 [P] [US1] Write failing activity-selection UI tests in `tests/integration/activityLoading.test.tsx` for one selected file, loading and success states, filename, local-only state, and session disposal.
 
 ### Implementation for User Story 1
 
