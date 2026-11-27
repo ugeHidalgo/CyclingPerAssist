@@ -18,6 +18,22 @@ async function selectFile(
   });
 }
 
+async function expectImportError(
+  page: import("@playwright/test").Page,
+  message: string | RegExp,
+) {
+  const dialog = page.getByRole("alertdialog", {
+    name: "Activity import failed",
+  });
+  await expect(dialog).toHaveAttribute("aria-modal", "true");
+  await expect(dialog.locator(".import-error")).toHaveText(message);
+}
+
+async function dismissImportError(page: import("@playwright/test").Page) {
+  await page.getByRole("button", { name: "Dismiss" }).click();
+  await expect(page.getByRole("alertdialog")).toHaveCount(0);
+}
+
 test("loads a FIT activity and renders the labeled speed chart", async ({
   page,
 }) => {
@@ -73,23 +89,28 @@ test("explains unsupported GPX, missing-speed, and corrupt FIT files", async ({
   await page.goto("/");
 
   await selectFile(page, "unsupported.gpx", await fixture("unsupported.gpx"));
-  await expect(page.getByRole("alert")).toHaveText(
+  await expectImportError(page,
     "Only FIT files are supported. Please choose a FIT file.",
   );
+  await dismissImportError(page);
 
   await selectFile(page, "no-speed.fit", await fixture("no-speed.fit"));
-  await expect(page.getByRole("alert")).toHaveText(
+  await expectImportError(page,
     "The FIT activity contains no usable recorded speed data.",
   );
+  await dismissImportError(page);
 
   const corrupt = Buffer.from(await fixture("valid-activity.fit"));
   const checksumIndex = corrupt.length - 1;
   corrupt.writeUInt8(corrupt.readUInt8(checksumIndex) ^ 0xff, checksumIndex);
   await selectFile(page, "corrupt.fit", corrupt);
-  await expect(page.getByRole("alert")).toHaveText(
+  await expectImportError(page,
     "The FIT file is corrupt, incomplete, or failed integrity validation.",
   );
-  await expect(page.getByRole("heading", { level: 2 })).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", { level: 2, name: "corrupt.fit" }),
+  ).toHaveCount(0);
+  await dismissImportError(page);
 });
 
 test("retains the previous chart when a replacement FIT file is corrupt", async ({
@@ -106,7 +127,7 @@ test("retains the previous chart when a replacement FIT file is corrupt", async 
   corrupt.writeUInt8(corrupt.readUInt8(checksumIndex) ^ 0xff, checksumIndex);
   await selectFile(page, "corrupt-replacement.fit", corrupt);
 
-  await expect(page.getByRole("alert")).toContainText(/corrupt|integrity/i);
+  await expectImportError(page, /corrupt|integrity/i);
   await expect(
     page.getByRole("heading", { level: 2, name: "valid-activity.fit" }),
   ).toBeVisible();
@@ -114,6 +135,9 @@ test("retains the previous chart when a replacement FIT file is corrupt", async 
   await expect(
     page.getByRole("heading", { level: 2, name: "corrupt-replacement.fit" }),
   ).toHaveCount(0);
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("alertdialog")).toHaveCount(0);
+  await expect(page.locator("figure.speed-chart svg")).toBeVisible();
 });
 
 test("a newer rapid file selection wins over a delayed older read", async ({

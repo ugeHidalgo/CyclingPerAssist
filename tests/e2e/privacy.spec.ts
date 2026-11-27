@@ -18,6 +18,22 @@ async function selectFile(
   });
 }
 
+async function expectImportError(
+  page: import("@playwright/test").Page,
+  message: string | RegExp,
+) {
+  const dialog = page.getByRole("alertdialog", {
+    name: "Activity import failed",
+  });
+  await expect(dialog).toHaveAttribute("aria-modal", "true");
+  await expect(dialog.locator(".import-error")).toHaveText(message);
+}
+
+async function dismissImportError(page: import("@playwright/test").Page) {
+  await page.getByRole("button", { name: "Dismiss" }).click();
+  await expect(page.getByRole("alertdialog")).toHaveCount(0);
+}
+
 test("keeps activity data out of network requests, persistent storage, and logs", async ({
   page,
 }) => {
@@ -106,10 +122,11 @@ test("reports recoverable read failures without losing a prior activity", async 
     "read-failure.fit",
     await fixture("valid-activity.fit"),
   );
-  await expect(page.getByRole("alert")).toHaveText(
+  await expectImportError(page,
     "The selected file could not be read. Please try again.",
   );
   await expect(page.locator("figure.speed-chart")).toHaveCount(0);
+  await dismissImportError(page);
 
   await selectFile(
     page,
@@ -125,11 +142,12 @@ test("reports recoverable read failures without losing a prior activity", async 
     "read-failure.fit",
     await fixture("valid-activity.fit"),
   );
-  await expect(page.getByRole("alert")).toHaveText(
+  await expectImportError(page,
     "The selected file could not be read. Please try again.",
   );
   await expect(
     page.getByRole("heading", { level: 2, name: "previous-activity.fit" }),
   ).toBeVisible();
   await expect(page.locator("figure.speed-chart svg")).toBeVisible();
+  await dismissImportError(page);
 });

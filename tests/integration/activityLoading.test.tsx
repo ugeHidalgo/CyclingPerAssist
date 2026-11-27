@@ -134,7 +134,10 @@ describe("activity loading screen", () => {
       replacementFile,
     );
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(/speed/i);
+    const dialog = await screen.findByRole("alertdialog", {
+      name: "Activity import failed",
+    });
+    expect(dialog).toHaveTextContent(/speed/i);
     expect(screen.getByText(previousFile.name)).toBeInTheDocument();
     expect(screen.queryByText(replacementFile.name)).not.toBeInTheDocument();
     expect(
