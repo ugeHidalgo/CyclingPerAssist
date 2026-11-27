@@ -139,11 +139,11 @@ Visual Studio Code without changing import, chart, or privacy behavior.
 
 **Purpose**: Validate the full browser/container workflow, privacy boundary, and documentation.
 
-- [ ] T030 [P] Add real-browser FIT, GPX, corrupt-file, chart, gaps, error-recovery, and rapid-selection scenarios against the Docker service in `tests/e2e/activity.spec.ts`, using `tests/fixtures/`.
-- [ ] T031 [P] Add real-browser network and storage privacy checks, session disposal, and recoverable read-failure scenarios in `tests/e2e/privacy.spec.ts`; ensure activity bytes and derived telemetry are not sent, persisted, or logged.
-- [ ] T032 [P] Document local prerequisites, fixture authorization, `npm ci`, test/build commands, Docker Compose startup and shutdown, and browser validation in `README.md`, consistent with `specs/001-fit-speed-chart/quickstart.md`.
-- [ ] T033 Run the unit/integration suite, production build, Compose startup, and Playwright scenarios documented in `specs/001-fit-speed-chart/quickstart.md`; fix any failures in the relevant implementation files before completing the task.
-- [ ] T034 Measure load/render time and resource use for authorized representative files and record the methodology and aggregate observations in `specs/001-fit-speed-chart/quickstart.md` without personal activity data; do not invent a numeric performance threshold or add a fixed file-size limit.
+- [X] T030 [P] Add real-browser FIT, GPX, corrupt-file, chart, gaps, error-recovery, and rapid-selection scenarios against the Docker service in `tests/e2e/activity.spec.ts`, using `tests/fixtures/`.
+- [X] T031 [P] Add real-browser network and storage privacy checks, session disposal, and recoverable read-failure scenarios in `tests/e2e/privacy.spec.ts`; ensure activity bytes and derived telemetry are not sent, persisted, or logged.
+- [X] T032 [P] Document local prerequisites, fixture authorization, `npm ci`, test/build commands, Docker Compose startup and shutdown, and browser validation in `README.md`, consistent with `specs/001-fit-speed-chart/quickstart.md`.
+- [X] T033 Run the unit/integration suite, production build, Compose startup, and Playwright scenarios documented in `specs/001-fit-speed-chart/quickstart.md`; fix any failures in the relevant implementation files before completing the task.
+- [X] T034 Measure load/render time and resource use for authorized representative files and record the methodology and aggregate observations in `specs/001-fit-speed-chart/quickstart.md` without personal activity data; do not invent a numeric performance threshold or add a fixed file-size limit.
 
 **Checkpoint**: T030–T032 follow the stories and visual phase; T033 follows T030–T032;
 T034 follows a working application and can use the same local setup.
