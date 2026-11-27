@@ -153,9 +153,9 @@ gracefully. Publish only the API port on `127.0.0.1:8080`; do not expose the dat
 
 - Keep the existing FIT parser, activity domain model, and import error behavior as regression
   boundaries. Add focused panel and file-handle-store tests before changing import state.
-- Test title limits, geometry clamping/clipping, chart resizing, menu order, keyboard flows,
-  dirty-state comparison, cancelled/failed saves, unavailable sources, and prior-chart retention
-  with Vitest and Testing Library.
+- Test title limits, geometry clamping/clipping, visible border and side/corner resize targets,
+  chart resizing, menu order, keyboard flows, dirty-state comparison, cancelled/failed saves,
+  unavailable sources, and prior-chart retention with Vitest and Testing Library.
 - Exercise the API and EF migrations against real PostgreSQL 16, including an empty database,
   first-save creation, update, validation errors, database failure, and concurrent upserts.
 - Extend the current Playwright privacy tests: permit same-origin setup `GET`/`PUT` containing

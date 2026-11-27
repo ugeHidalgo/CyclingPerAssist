@@ -40,12 +40,13 @@ As a cyclist, I want to move and resize the Data Panel and give it a title so th
 
 1. **Given** the options button is selected, **When** its menu opens, **Then** the options appear in this order: open file picker, edit title, Save.
 2. **Given** the panel is within the Data Area, **When** the user drags it to a new position, **Then** it moves and remains within the Data Area while the area can contain it.
-3. **Given** the Data Panel is resized horizontally or vertically, **When** its size changes, **Then** its chart adapts to the remaining chart area, the panel respects its minimum size, and the title and Options Panels remain 50 pixels high.
-4. **Given** the Data Area becomes smaller than the panel, **When** the layout is displayed, **Then** the panel is clipped at the Data Area boundary and the overlapping portion remains visible.
-5. **Given** the title is read-only, **When** the user chooses the title-editing option, **Then** the title becomes editable and its background changes to white without changing the chart.
-6. **Given** the user enters more than 200 characters for a title, **When** editing ends, **Then** the title value contains no more than the first 200 characters.
-7. **Given** a title contains more text than fits the title area, **When** it is displayed, **Then** it is truncated with three dots while the saved title value remains unchanged.
-8. **Given** the user operates the application by keyboard, **When** they use the options menu, file picker, title editor, and confirmation dialogs, **Then** each can be operated without a mouse; moving and resizing the panel may require a mouse.
+3. **Given** the Data Panel is displayed, **When** the user views its perimeter, **Then** it has a thin, continuous border that is clearly distinguishable from the Data Area and identifies the panel's resize edges and corners.
+4. **Given** the user selects and drags a Data Panel border or corner, **When** the drag changes the panel size, **Then** a side border resizes its corresponding dimension, a corner resizes both dimensions, the chart adapts, and the panel respects its minimum and maximum size while the Title and Options Panels remain 50 pixels high.
+5. **Given** the Data Area becomes smaller than the panel, **When** the layout is displayed, **Then** the panel is clipped at the Data Area boundary and the overlapping portion remains visible.
+6. **Given** the title is read-only, **When** the user chooses the title-editing option, **Then** the title becomes editable and its background changes to white without changing the chart.
+7. **Given** the user enters more than 200 characters for a title, **When** editing ends, **Then** the title value contains no more than the first 200 characters.
+8. **Given** a title contains more text than fits the title area, **When** it is displayed, **Then** it is truncated with three dots while the saved title value remains unchanged.
+9. **Given** the user operates the application by keyboard, **When** they use the options menu, file picker, title editor, and confirmation dialogs, **Then** each can be operated without a mouse; moving and resizing the panel may require a mouse.
 
 ---
 
@@ -98,7 +99,7 @@ As a cyclist, I want to save my Data Panel setup and restore it in a later sessi
 - **FR-008**: The file picker MUST allow selection from any user-accessible folder. Where the browser supports persistent local file references, the application MUST associate the selected file with an opaque local reference and filename in the current panel setup. The application MUST NOT expose or persist an absolute filesystem path, and MUST NOT move or copy the source file. In browsers without persistent local file references, the selected file remains usable for the current session but cannot be guaranteed to reopen after restart.
 - **FR-009**: The chart MUST occupy the space remaining between the Title Panel and Options Panel and MUST adapt when the Data Panel is resized.
 - **FR-010**: The user MUST be able to move the Data Panel by dragging it. The panel MUST remain within the Data Area while the Data Area can contain it; if the Data Area becomes smaller than the panel, the out-of-bounds portion MUST be clipped.
-- **FR-011**: The user MUST be able to resize the Data Panel in both dimensions. Its minimum size MUST be 200 by 200 pixels, and its maximum resize dimensions MUST be limited by the available Data Area when that area is at least the minimum size.
+- **FR-011**: The Data Panel MUST have a thin, continuous border that is clearly distinguishable from the Data Area and serves as a resize target. The user MUST be able to select and drag a side border to resize its corresponding dimension or a corner to resize both dimensions. The panel's minimum size MUST be 200 by 200 pixels, and its maximum resize dimensions MUST be limited by the available Data Area when that area is at least the minimum size.
 - **FR-012**: Enabling title editing MUST NOT change, interrupt, or remove the chart. Selecting Save MUST end title editing and return the title to read-only, whether the Save confirmation is accepted or declined.
 - **FR-013**: Selecting Save MUST show a confirmation before any setup is persisted. Confirming MUST save the panel ID, owner identity, title, height, width, position, and selected filename; when a persistent local file reference is available, its opaque identifier MUST also be saved. The first confirmed save MUST create a setup with a unique ID for the current user; later confirmed saves MUST update only that user's setup.
 - **FR-014**: Changes to the current panel setup MUST remain in the current session until a Save confirmation is accepted. Declining the Save confirmation MUST leave the previously saved setup unchanged while retaining current changes in the panel.
@@ -117,7 +118,7 @@ As a cyclist, I want to save my Data Panel setup and restore it in a later sessi
 ### Key Entities *(include if feature involves data)*
 
 - **Data Area**: The available application viewport that contains the Data Panel.
-- **Data Panel**: The single chart container shown in this feature, with a unique ID, title, position, width, height, selected source, and current session state.
+- **Data Panel**: The single chart container shown in this feature, with a unique ID, title, position, width, height, selected source, current session state, and a visible border that identifies its resize targets.
 - **Panel setup**: The confirmed values needed to restore a Data Panel: ID, owner identity, title, position, dimensions, selected file's opaque local-reference identifier, and filename. The local file reference is stored separately in browser-managed storage.
 - **Data source**: A user-selected activity file, identified by a browser-local reference and filename; the file contents and derived telemetry are separate from the persisted panel setup.
 
@@ -126,7 +127,7 @@ As a cyclist, I want to save my Data Panel setup and restore it in a later sessi
 ### Measurable Outcomes
 
 - **SC-001**: In 100% of first-use scenarios, exactly one panel appears at the Data Area's upper-left corner with the specified default dimensions, subject to the minimum size.
-- **SC-002**: After each tested resize, the chart fits the remaining panel area and the title and options areas remain 50 pixels high.
+- **SC-002**: After each tested resize initiated from a visible panel border or corner, the chart fits the remaining panel area and the title and options areas remain 50 pixels high.
 - **SC-003**: In 100% of confirmed-save scenarios, the saved setup is restored after an application restart; cancelling Save leaves the previously saved values unchanged.
 - **SC-004**: In 100% of close attempts made with unsaved changes, the application asks whether to discard them and follows the user's choice.
 - **SC-005**: In 100% of missing-source startup scenarios, the saved panel geometry and filename are displayed with an unavailable warning, an empty title, and a blank chart.
@@ -136,6 +137,7 @@ As a cyclist, I want to save my Data Panel setup and restore it in a later sessi
 - **SC-009**: In 100% of simulated save-failure scenarios, the prior saved setup remains unchanged, the current panel remains marked unsaved, and the user is offered a retry after receiving an error.
 - **SC-010**: In 100% of concurrent-save scenarios, the final persisted setup matches the data from the most recently confirmed successful save.
 - **SC-011**: All menu, file selection, title editing, and confirmation-dialog workflows can be completed using a keyboard without using a mouse; moving and resizing remain pointer-operated actions.
+- **SC-012**: In 100% of tested panel views, the thin border is distinguishable from the Data Area; dragging each side or corner resizes the corresponding dimension or dimensions.
 
 ## Assumptions
 

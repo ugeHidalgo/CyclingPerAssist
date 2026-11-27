@@ -52,9 +52,10 @@ Do not use `docker compose down -v` when validating persistence; that removes th
    panel setup fields, including filename and optional opaque handle UUID, may reach the API.
    Confirm that file bytes, telemetry, browser handle objects, and absolute paths are absent from
    requests, PostgreSQL rows, and application logs.
-4. **Panel interactions**: Test menu ordering, keyboard-operable file selection/title editing/
-   confirmation, title truncation and 200-character limit, pointer move/resize, 200-by-200
-   minimum dimensions, clipping to the Data Area, and chart resizing.
+4. **Panel interactions**: Verify the thin, visible border is distinguishable from the Data
+   Area and that side edges and corners are resize targets. Test menu ordering, keyboard-operable
+   file selection/title editing/confirmation, title truncation and 200-character limit, pointer
+   movement, 200-by-200 minimum dimensions, clipping, and chart resizing.
 5. **Confirmed and declined save**: Change geometry, title, and source. Decline Save and verify
    the database row is unchanged while the panel remains dirty and title editing ends. Confirm a
    later Save and verify the row and response match the saved values.

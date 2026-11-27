@@ -64,6 +64,9 @@ and the [product brainstorming document](./1%20-%20Brain%20Storming.md).
 ## Panel Layout and Interaction
 
 - The Data Area uses the full screen space available to the application when it is open.
+- The Data Panel has a thin, continuous border that is clearly distinguishable from the
+  Data Area. Its side borders and corners are selectable resize targets for changing the
+  panel's width and height.
 - The user can move the panel by holding the mouse button on it, dragging it to a new
   position, and releasing the button. Keep it within the Data Area while the area can
   contain it. If the Data Area becomes smaller than the panel, clip the part outside it so
