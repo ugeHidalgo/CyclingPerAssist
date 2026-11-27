@@ -45,6 +45,7 @@ As a cyclist, I want to move and resize the Data Panel and give it a title so th
 5. **Given** the title is read-only, **When** the user chooses the title-editing option, **Then** the title becomes editable and its background changes to white without changing the chart.
 6. **Given** the user enters more than 200 characters for a title, **When** editing ends, **Then** the title value contains no more than the first 200 characters.
 7. **Given** a title contains more text than fits the title area, **When** it is displayed, **Then** it is truncated with three dots while the saved title value remains unchanged.
+8. **Given** the user operates the application by keyboard, **When** they use the options menu, file picker, title editor, and confirmation dialogs, **Then** each can be operated without a mouse; moving and resizing the panel may require a mouse.
 
 ---
 
@@ -62,18 +63,23 @@ As a cyclist, I want to save my Data Panel setup and restore it in a later sessi
 2. **Given** no setup has previously been saved, **When** the user confirms Save for the first time, **Then** a setup is created with a unique ID; later confirmed saves update that setup.
 3. **Given** the user declines the Save confirmation, **When** the dialog closes, **Then** the previously saved setup remains unchanged, the current panel keeps its unsaved changes, and title editing ends with the title returned to read-only.
 4. **Given** a confirmed setup exists, **When** the application is restarted and the configured source file is available, **Then** the saved panel setup and activity are restored.
-5. **Given** a confirmed setup exists but its configured source file is missing or its saved access authorization is unavailable, **When** the application opens, **Then** the panel uses its saved geometry but has an empty title and blank chart.
+5. **Given** a confirmed setup exists but its configured source file is missing or its saved access authorization is unavailable, **When** the application opens, **Then** the panel uses its saved geometry, keeps the saved filename visible with an unavailable warning, and has an empty title and blank chart.
 6. **Given** the current setup differs from the last confirmed setup, **When** the user attempts to close the application, **Then** a confirmation asks whether to exit without saving; confirming exits and discards the unsaved changes, while cancelling keeps the application open.
 7. **Given** the current setup has unsaved changes, **When** the user restores every setup field to its last confirmed value, **Then** the system no longer treats the panel as having unsaved changes and closing it does not prompt to discard changes.
 8. **Given** a confirmed setup exists, **When** the application service is restarted or the application and its persistent data are moved together, **Then** the saved setup remains available.
+9. **Given** the initial release has one default user, **When** that user confirms Save, **Then** the setup is associated with that user and later saves update only that user's setup.
+10. **Given** a confirmed Save cannot be persisted, **When** the save fails, **Then** the current panel values remain available and marked unsaved, the user sees an error and can retry, and the previous saved setup remains unchanged.
+11. **Given** two sessions have edited the same user's setup, **When** both sessions successfully confirm Save, **Then** the setup from the last confirmed Save replaces the previously saved setup.
 
 ---
 
 ### Edge Cases
 
 - The Data Area may be smaller than the Data Panel or smaller than the panel's minimum dimensions; the panel remains at least 200 by 200 pixels and is clipped to the visible Data Area.
-- A saved source file may be missing or inaccessible when the application starts; the saved panel geometry remains available and the panel is blank with an empty title.
+- A saved source file may be missing or inaccessible when the application starts; the saved panel geometry and filename remain visible, the panel has an empty title and blank chart, and the user is told the file is unavailable.
 - A replacement activity may fail to load; the last successfully loaded chart and its source filename remain visible, and the new selection's error is shown.
+- A confirmed setup save may fail; the current panel state remains unsaved, the previous saved setup remains unchanged, and the user can retry after seeing an error.
+- Multiple sessions may update the same user's setup; the last successfully confirmed save replaces the saved values from earlier sessions.
 - A title may exceed the available width or the 200-character limit; the title value is limited to the first 200 characters, and overflowing displayed text is truncated with three dots.
 - Declining a Save confirmation does not undo current in-memory changes. Those changes remain unsaved and are still subject to the close-with-unsaved-changes confirmation.
 - If the user restores all current values to match the last confirmed setup, the panel is treated as having no unsaved changes.
@@ -94,21 +100,25 @@ As a cyclist, I want to save my Data Panel setup and restore it in a later sessi
 - **FR-010**: The user MUST be able to move the Data Panel by dragging it. The panel MUST remain within the Data Area while the Data Area can contain it; if the Data Area becomes smaller than the panel, the out-of-bounds portion MUST be clipped.
 - **FR-011**: The user MUST be able to resize the Data Panel in both dimensions. Its minimum size MUST be 200 by 200 pixels, and its maximum resize dimensions MUST be limited by the available Data Area when that area is at least the minimum size.
 - **FR-012**: Enabling title editing MUST NOT change, interrupt, or remove the chart. Selecting Save MUST end title editing and return the title to read-only, whether the Save confirmation is accepted or declined.
-- **FR-013**: Selecting Save MUST show a confirmation before any setup is persisted. Confirming MUST save the panel ID, title, height, width, position, selected file's folder path, and filename. The first confirmed save MUST create a setup with a unique ID; later confirmed saves MUST update it.
+- **FR-013**: Selecting Save MUST show a confirmation before any setup is persisted. Confirming MUST save the panel ID, owner identity, title, height, width, position, selected file's folder path, and filename. The first confirmed save MUST create a setup with a unique ID for the current user; later confirmed saves MUST update only that user's setup.
 - **FR-014**: Changes to the current panel setup MUST remain in the current session until a Save confirmation is accepted. Declining the Save confirmation MUST leave the previously saved setup unchanged while retaining current changes in the panel.
 - **FR-015**: On application startup, the system MUST restore the saved panel position, dimensions, title, and selected source when available. If the source file still exists and the user's previously granted access remains valid, the system MUST reopen the file from its saved folder path and filename and show the configured activity.
-- **FR-016**: If the configured source file does not exist or cannot be accessed at startup, the system MUST show the panel with its saved geometry, an empty title, and a blank chart.
+- **FR-016**: If the configured source file does not exist or cannot be accessed at startup, the system MUST show the panel with its saved geometry, keep the saved filename visible with a clear unavailable warning, and leave the title empty and chart blank.
 - **FR-017**: A saved panel setup MUST remain available after the application or its saved-data store is restarted and when the application is moved together with its associated persistent data.
-- **FR-018**: Only the panel setup fields needed to restore the panel, including the selected file's folder path and filename, MUST be persisted. The source file contents and derived activity telemetry MUST NOT be included in the saved setup or sent with setup data.
-- **FR-019**: If a replacement activity fails to load, the system MUST retain and identify the last successfully loaded activity and chart while showing a clear error for the failed selection.
-- **FR-020**: The system MUST consider the setup to have unsaved changes when any saved setup field differs from its last confirmed value. Restoring all fields to their saved values MUST clear the unsaved-changes state.
-- **FR-021**: When the user attempts to close the application with unsaved panel changes, the system MUST ask whether to exit without saving. Confirming MUST discard the changes and close the application; cancelling MUST keep the application open and its current panel state.
+- **FR-018**: Each saved panel setup MUST be associated with its owner. The initial release MUST use one default user without requiring login; when multiple users are introduced, each user's setup MUST be isolated from other users' setups.
+- **FR-019**: Only the panel setup fields needed to restore the panel, including the selected file's folder path and filename and its owner's identity, MUST be persisted. The source file contents and derived activity telemetry MUST NOT be included in the saved setup or sent with setup data.
+- **FR-020**: If a replacement activity fails to load, the system MUST retain and identify the last successfully loaded activity and chart while showing a clear error for the failed selection.
+- **FR-021**: The system MUST consider the setup to have unsaved changes when any saved setup field differs from its last confirmed value. Restoring all fields to their saved values MUST clear the unsaved-changes state.
+- **FR-022**: When the user attempts to close the application with unsaved panel changes, the system MUST ask whether to exit without saving. Confirming MUST discard the changes and close the application; cancelling MUST keep the application open and its current panel state.
+- **FR-023**: If a confirmed setup save fails, the system MUST keep the current panel values in the active session, keep them marked as unsaved, show a clear error, allow the user to retry, and leave the previously saved setup unchanged.
+- **FR-024**: When multiple sessions save the same user's setup, the most recently confirmed successful save MUST replace the previously saved setup; the system MUST NOT block it with a conflict or locking prompt.
+- **FR-025**: The options menu, file picker, title editor, and Save and close confirmation dialogs MUST be operable by keyboard. Moving and resizing the Data Panel MAY require a mouse.
 
 ### Key Entities *(include if feature involves data)*
 
 - **Data Area**: The available application viewport that contains the Data Panel.
 - **Data Panel**: The single chart container shown in this feature, with a unique ID, title, position, width, height, selected source, and current session state.
-- **Panel setup**: The confirmed values needed to restore a Data Panel: ID, title, position, dimensions, selected file's folder path, and filename.
+- **Panel setup**: The confirmed values needed to restore a Data Panel: ID, owner identity, title, position, dimensions, selected file's folder path, and filename.
 - **Data source**: A user-selected activity file, identified by its folder path and filename; the file contents and derived telemetry are separate from the persisted panel setup.
 
 ## Success Criteria *(mandatory)*
@@ -119,9 +129,13 @@ As a cyclist, I want to save my Data Panel setup and restore it in a later sessi
 - **SC-002**: After each tested resize, the chart fits the remaining panel area and the title and options areas remain 50 pixels high.
 - **SC-003**: In 100% of confirmed-save scenarios, the saved setup is restored after an application restart; cancelling Save leaves the previously saved values unchanged.
 - **SC-004**: In 100% of close attempts made with unsaved changes, the application asks whether to discard them and follows the user's choice.
-- **SC-005**: In 100% of missing-source startup scenarios, the saved panel geometry is displayed with an empty title and blank chart.
+- **SC-005**: In 100% of missing-source startup scenarios, the saved panel geometry and filename are displayed with an unavailable warning, an empty title, and a blank chart.
 - **SC-006**: In 100% of failed replacement scenarios, the previous activity filename and chart remain visible and the failed selection is not displayed as active.
 - **SC-007**: No saved setup contains source file contents or derived activity telemetry.
+- **SC-008**: Every saved setup is associated with exactly one owner; the initial release uses one default user, and future users' setups are isolated from one another.
+- **SC-009**: In 100% of simulated save-failure scenarios, the prior saved setup remains unchanged, the current panel remains marked unsaved, and the user is offered a retry after receiving an error.
+- **SC-010**: In 100% of concurrent-save scenarios, the final persisted setup matches the data from the most recently confirmed successful save.
+- **SC-011**: All menu, file selection, title editing, and confirmation-dialog workflows can be completed using a keyboard without using a mouse; moving and resizing remain pointer-operated actions.
 
 ## Assumptions
 
@@ -134,8 +148,17 @@ As a cyclist, I want to save my Data Panel setup and restore it in a later sessi
 - A missing or inaccessible source at startup does not overwrite the saved setup automatically; the blank-title behavior applies to the displayed panel until the user makes and confirms a new save.
 - The data source continues to use the activity formats supported by the existing application; this feature does not add a new file format.
 - The user expects a previously granted authorization to permit reopening a source file after application restart. If the file is missing or access is no longer available, the blank-panel behavior in FR-016 applies.
+- The initial release has one default user and does not require login. If login is added later, each user has an isolated panel setup.
 - No performance threshold is introduced without measurements on representative files, consistent with the project constitution.
 
 ## Clarifications
 
 - **2026-11-27 — Local file restoration**: The user chose persistent, previously authorized access. The application automatically reloads the file after restart only while that file remains available and the authorization remains valid; the implementation mechanism belongs in `/speckit-plan`.
+
+### Session 2026-11-27
+
+- Q: ¿El setup del Data Panel debe ser único para cada instalación de la aplicación o estar separado por usuario? → A: Cada usuario tendrá su setup aislado; en la versión inicial habrá un único usuario predeterminado sin login, y futuros usuarios tendrán setups separados.
+- Q: Si el archivo guardado no está disponible al abrir la aplicación, ¿qué debe mostrar el Options Panel junto al botón de opciones? → A: Mantener visible el nombre guardado y mostrar un aviso de archivo no disponible, dejando el título vacío y el gráfico en blanco.
+- Q: Si la persona confirma Save pero el setup no puede guardarse, ¿qué debe ocurrir con los cambios actuales? → A: Conservar los cambios como no guardados, informar del fallo y permitir reintentar; el setup persistido anterior no cambia.
+- Q: Si dos sesiones del mismo usuario modifican el mismo setup y una guarda antes que la otra, ¿qué debe ocurrir al intentar guardar desde la sesión más antigua? → A: El último Save confirmado sobrescribe el setup anterior; el último guardado exitoso es el vigente.
+- Q: ¿Qué operaciones del Data Panel deben poder realizarse con teclado además del ratón? → A: El menú, la selección de archivo, la edición del título y los diálogos deben ser operables con teclado; mover y redimensionar pueden requerir ratón.
