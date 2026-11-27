@@ -92,9 +92,11 @@ retention independently of chart rendering.
 - [X] T019 [US2] Implement content-based FIT/GPX classification and unsupported-file rejection in `src/adapters/fileContent.ts`; integrate it with `src/adapters/fitActivity.ts` after T017 without implementing GPX import.
 - [X] T020 [US2] Implement clear messages for GPX, empty, corrupt, unsupported, missing-speed, and recoverable read failures in `src/components/ImportError.tsx`.
 - [X] T021 [US2] Connect classification and error presentation in `src/app/ActivityScreen.tsx`, retaining and identifying the previous successful activity while rejecting incomplete results; make T018 pass.
+- [X] T035 [US2] Extend `tests/integration/activityErrors.test.tsx` to cover an accessible, dismissible modal for initial import failures and failed replacements, including unsupported GPX and FIT files without speed; implement the dialog in `src/components/ImportError.tsx` and integrate it in `src/app/ActivityScreen.tsx`, retaining the prior activity name and chart after failed replacements.
 
-**Checkpoint**: T017 precedes T019; T018 precedes T020–T021. T019–T021 integrate with P1
-components rather than assuming P2 can be deployed without an import flow.
+**Checkpoint**: T017 precedes T019; T018 precedes T020–T021 and T035. T019–T021 integrate with
+P1 components rather than assuming P2 can be deployed without an import flow. T035 extends that
+error flow and must be complete before US2 is considered done.
 
 ## Phase 5: User Story 3 - View Speed Over Elapsed Time (Priority: P3)
 
@@ -123,13 +125,13 @@ retained-chart error integration also depends on P2.
 **Purpose**: Give the completed activity screen a cohesive, light visual style inspired by
 Visual Studio Code without changing import, chart, or privacy behavior.
 
-- [ ] T027 Define and load CSS theme tokens in `src/styles/theme.css` and `src/main.tsx` for a
+- [X] T027 Define and load CSS theme tokens in `src/styles/theme.css` and `src/main.tsx` for a
   VS Code-inspired light palette, typography, spacing, and surface hierarchy; do not add a UI
   dependency or branded assets.
-- [ ] T028 Apply the theme to `src/app/ActivityScreen.tsx`, `src/components/ActivityPicker.tsx`,
+- [X] T028 Apply the theme to `src/app/ActivityScreen.tsx`, `src/components/ActivityPicker.tsx`,
   `src/components/ImportError.tsx`, and `src/components/SpeedChart.tsx`, polishing empty,
   loading, success, and error states while preserving their existing semantics and behavior.
-- [ ] T029 Verify accessible presentation across the styled screen: keyboard operation, visible
+- [X] T029 Verify accessible presentation across the styled screen: keyboard operation, visible
   focus, semantic labels/status/error announcements, and WCAG AA text contrast; add focused
   accessibility checks in `tests/integration/accessibility.test.tsx`.
 
@@ -139,25 +141,14 @@ Visual Studio Code without changing import, chart, or privacy behavior.
 
 **Purpose**: Validate the full browser/container workflow, privacy boundary, and documentation.
 
-- [ ] T030 [P] Add real-browser FIT, GPX, corrupt-file, chart, gaps, error-recovery, and rapid-selection scenarios against the Docker service in `tests/e2e/activity.spec.ts`, using `tests/fixtures/`.
-- [ ] T031 [P] Add real-browser network and storage privacy checks, session disposal, and recoverable read-failure scenarios in `tests/e2e/privacy.spec.ts`; ensure activity bytes and derived telemetry are not sent, persisted, or logged.
-- [ ] T032 [P] Document local prerequisites, fixture authorization, `npm ci`, test/build commands, Docker Compose startup and shutdown, and browser validation in `README.md`, consistent with `specs/001-fit-speed-chart/quickstart.md`.
-- [ ] T033 Run the unit/integration suite, production build, Compose startup, and Playwright scenarios documented in `specs/001-fit-speed-chart/quickstart.md`; fix any failures in the relevant implementation files before completing the task.
-- [ ] T034 Measure load/render time and resource use for authorized representative files and record the methodology and aggregate observations in `specs/001-fit-speed-chart/quickstart.md` without personal activity data; do not invent a numeric performance threshold or add a fixed file-size limit.
+- [X] T030 [P] Add real-browser FIT, GPX, corrupt-file, chart, gaps, error-recovery, and rapid-selection scenarios against the Docker service in `tests/e2e/activity.spec.ts`, using `tests/fixtures/`.
+- [X] T031 [P] Add real-browser network and storage privacy checks, session disposal, and recoverable read-failure scenarios in `tests/e2e/privacy.spec.ts`; ensure activity bytes and derived telemetry are not sent, persisted, or logged.
+- [X] T032 [P] Document local prerequisites, fixture authorization, `npm ci`, test/build commands, Docker Compose startup and shutdown, and browser validation in `README.md`, consistent with `specs/001-fit-speed-chart/quickstart.md`.
+- [X] T033 Run the unit/integration suite, production build, Compose startup, and Playwright scenarios documented in `specs/001-fit-speed-chart/quickstart.md`; fix any failures in the relevant implementation files before completing the task.
+- [X] T034 Measure load/render time and resource use for authorized representative files and record the methodology and aggregate observations in `specs/001-fit-speed-chart/quickstart.md` without personal activity data; do not invent a numeric performance threshold or add a fixed file-size limit.
 
 **Checkpoint**: T030–T032 follow the stories and visual phase; T033 follows T030–T032;
 T034 follows a working application and can use the same local setup.
-
-## Phase 8: Miscellanea
-
-**Purpose**: Track small user-requested refinements that fall outside the completed user stories.
-Keep future miscellaneous refinements in the same task as additional explicit acceptance criteria.
-
-- [ ] T035 Implement an accessible, dismissible modal dialog for import errors in `src/components/ImportError.tsx` and integrate it in `src/app/ActivityScreen.tsx`; show the specific current error, including unsupported GPX and FIT files without speed, and cover initial failures and failed replacements in `tests/integration/activityErrors.test.tsx` while retaining the prior activity name and chart. Add future small user-requested refinements to this same task as explicit acceptance criteria.
-
-**Checkpoint**: Every import failure opens a dismissible dialog with the relevant message;
-a failed replacement retains the previous activity and chart. Record later miscellaneous
-refinements under T035.
 
 ## Dependencies & Execution Order
 
@@ -167,7 +158,6 @@ refinements under T035.
 Phase 1 Setup -> Phase 2 Foundational -> US1 (P1) -> US2 (P2) -> US3 (P3)
                                          \-------------------------> US3 core
 US1 + US2 + US3 -> Phase 6 visual polish -> Phase 7 cross-cutting validation
-Phase 7 cross-cutting validation -> Phase 8 Miscellanea
 ```
 
 - US2's classification and recovery can be tested independently with a ready-state fixture,
@@ -188,8 +178,6 @@ Phase 7 cross-cutting validation -> Phase 8 Miscellanea
 - After the foundation, T017/T018 and T022/T023 can be authored against fixtures independently
   of one another; story integrations still follow the dependency order above.
 - After visual polish, T030, T031, and T032 can run in parallel in separate files.
-- Phase 8 currently contains only T035; its error-dialog and screen integration work is
-  sequential because it touches the same error presentation and activity screen.
 
 ## Parallel Examples
 
@@ -221,5 +209,3 @@ the finished chart into the screen after US1 and US2.
 5. Run the full browser/container, privacy, and performance-measurement checks.
 6. Review the final implementation against the specification and run `/speckit-converge` after
    `/speckit-implement`; do not treat unchecked reviewer-owned checklist items as approved.
-7. Complete Phase 8's miscellaneous user-requested refinements, extending T035 with explicit
-   acceptance criteria as additional small changes are requested.

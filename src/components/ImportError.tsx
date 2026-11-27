@@ -1,3 +1,4 @@
+import { useEffect, useRef, type KeyboardEvent } from "react";
 import {
   ActivityImportError,
   type ActivityImportErrorKind,
@@ -15,11 +16,62 @@ const errorMessages: Record<ActivityImportErrorKind, string> = {
 
 interface ImportErrorProps {
   error: Error;
+  onDismiss: () => void;
 }
 
-export function ImportError({ error }: ImportErrorProps) {
+export function ImportError({ error, onDismiss }: ImportErrorProps) {
+  const dismissButtonRef = useRef<HTMLButtonElement>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const kind =
     error instanceof ActivityImportError ? error.kind : "invalid";
 
-  return <p role="alert">{errorMessages[kind]}</p>;
+  useEffect(() => {
+    previouslyFocusedRef.current =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+    dismissButtonRef.current?.focus();
+
+    return () => {
+      if (previouslyFocusedRef.current?.isConnected) {
+        previouslyFocusedRef.current.focus();
+      }
+    };
+  }, []);
+
+  function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      onDismiss();
+    } else if (event.key === "Tab") {
+      event.preventDefault();
+      dismissButtonRef.current?.focus();
+    }
+  }
+
+  return (
+    <div className="import-error-backdrop">
+      <section
+        aria-describedby="import-error-message"
+        aria-labelledby="import-error-title"
+        aria-modal="true"
+        className="import-error-dialog"
+        onKeyDown={handleKeyDown}
+        role="alertdialog"
+      >
+        <h2 id="import-error-title">Activity import failed</h2>
+        <p className="import-error" id="import-error-message">
+          {errorMessages[kind]}
+        </p>
+        <button
+          className="import-error-dialog__dismiss"
+          onClick={onDismiss}
+          ref={dismissButtonRef}
+          type="button"
+        >
+          Dismiss
+        </button>
+      </section>
+    </div>
+  );
 }
