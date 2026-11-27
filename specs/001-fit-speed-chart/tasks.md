@@ -123,13 +123,13 @@ retained-chart error integration also depends on P2.
 **Purpose**: Give the completed activity screen a cohesive, light visual style inspired by
 Visual Studio Code without changing import, chart, or privacy behavior.
 
-- [ ] T027 Define and load CSS theme tokens in `src/styles/theme.css` and `src/main.tsx` for a
+- [X] T027 Define and load CSS theme tokens in `src/styles/theme.css` and `src/main.tsx` for a
   VS Code-inspired light palette, typography, spacing, and surface hierarchy; do not add a UI
   dependency or branded assets.
-- [ ] T028 Apply the theme to `src/app/ActivityScreen.tsx`, `src/components/ActivityPicker.tsx`,
+- [X] T028 Apply the theme to `src/app/ActivityScreen.tsx`, `src/components/ActivityPicker.tsx`,
   `src/components/ImportError.tsx`, and `src/components/SpeedChart.tsx`, polishing empty,
   loading, success, and error states while preserving their existing semantics and behavior.
-- [ ] T029 Verify accessible presentation across the styled screen: keyboard operation, visible
+- [X] T029 Verify accessible presentation across the styled screen: keyboard operation, visible
   focus, semantic labels/status/error announcements, and WCAG AA text contrast; add focused
   accessibility checks in `tests/integration/accessibility.test.tsx`.
 

@@ -5,6 +5,7 @@ export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
+      css: true,
       clearMocks: true,
       environment: "jsdom",
       restoreMocks: true,
