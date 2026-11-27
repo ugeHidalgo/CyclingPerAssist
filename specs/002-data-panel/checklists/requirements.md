@@ -31,4 +31,4 @@
 
 ## Notes
 
-- FR-015 now specifies the user's choice of persistent, previously authorized local-file access; `/speckit-plan` must determine the mechanism that supports it.
+- FR-015 uses a browser-managed local file reference where supported; the saved setup stores only its opaque identifier and filename, not an absolute path or file contents.

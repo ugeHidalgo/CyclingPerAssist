@@ -59,7 +59,7 @@ As a cyclist, I want to save my Data Panel setup and restore it in a later sessi
 
 **Acceptance Scenarios**:
 
-1. **Given** the panel setup has changed, **When** the user chooses Save and confirms the confirmation dialog, **Then** the current panel ID, title, size, position, selected file's folder path, and filename are saved.
+1. **Given** the panel setup has changed, **When** the user chooses Save and confirms the confirmation dialog, **Then** the current panel ID, title, size, position, selected file's local reference, and filename are saved. The reference itself remains in browser-managed local storage.
 2. **Given** no setup has previously been saved, **When** the user confirms Save for the first time, **Then** a setup is created with a unique ID; later confirmed saves update that setup.
 3. **Given** the user declines the Save confirmation, **When** the dialog closes, **Then** the previously saved setup remains unchanged, the current panel keeps its unsaved changes, and title editing ends with the title returned to read-only.
 4. **Given** a confirmed setup exists, **When** the application is restarted and the configured source file is available, **Then** the saved panel setup and activity are restored.
@@ -95,18 +95,18 @@ As a cyclist, I want to save my Data Panel setup and restore it in a later sessi
 - **FR-005**: The title MUST be read-only by default and use the Options Panel's darker surface color. When title editing is enabled, the title area MUST have a white background.
 - **FR-006**: The Options Panel MUST contain one options button and display the selected activity filename immediately to its right.
 - **FR-007**: Selecting the options button MUST open a menu with exactly these options in order: open the file picker, edit the panel title, and Save.
-- **FR-008**: The file picker MUST allow selection from any user-accessible folder. The application MUST retain the selected file's folder path and filename in the current panel setup and MUST NOT move or copy the source file.
+- **FR-008**: The file picker MUST allow selection from any user-accessible folder. Where the browser supports persistent local file references, the application MUST associate the selected file with an opaque local reference and filename in the current panel setup. The application MUST NOT expose or persist an absolute filesystem path, and MUST NOT move or copy the source file. In browsers without persistent local file references, the selected file remains usable for the current session but cannot be guaranteed to reopen after restart.
 - **FR-009**: The chart MUST occupy the space remaining between the Title Panel and Options Panel and MUST adapt when the Data Panel is resized.
 - **FR-010**: The user MUST be able to move the Data Panel by dragging it. The panel MUST remain within the Data Area while the Data Area can contain it; if the Data Area becomes smaller than the panel, the out-of-bounds portion MUST be clipped.
 - **FR-011**: The user MUST be able to resize the Data Panel in both dimensions. Its minimum size MUST be 200 by 200 pixels, and its maximum resize dimensions MUST be limited by the available Data Area when that area is at least the minimum size.
 - **FR-012**: Enabling title editing MUST NOT change, interrupt, or remove the chart. Selecting Save MUST end title editing and return the title to read-only, whether the Save confirmation is accepted or declined.
-- **FR-013**: Selecting Save MUST show a confirmation before any setup is persisted. Confirming MUST save the panel ID, owner identity, title, height, width, position, selected file's folder path, and filename. The first confirmed save MUST create a setup with a unique ID for the current user; later confirmed saves MUST update only that user's setup.
+- **FR-013**: Selecting Save MUST show a confirmation before any setup is persisted. Confirming MUST save the panel ID, owner identity, title, height, width, position, and selected filename; when a persistent local file reference is available, its opaque identifier MUST also be saved. The first confirmed save MUST create a setup with a unique ID for the current user; later confirmed saves MUST update only that user's setup.
 - **FR-014**: Changes to the current panel setup MUST remain in the current session until a Save confirmation is accepted. Declining the Save confirmation MUST leave the previously saved setup unchanged while retaining current changes in the panel.
-- **FR-015**: On application startup, the system MUST restore the saved panel position, dimensions, title, and selected source when available. If the source file still exists and the user's previously granted access remains valid, the system MUST reopen the file from its saved folder path and filename and show the configured activity.
+- **FR-015**: On application startup, the system MUST restore the saved panel position, dimensions, title, and selected source when available. If the local file reference exists, the source file still exists, and the user's previously granted access remains valid, the system MUST reopen the file through that reference and show the configured activity.
 - **FR-016**: If the configured source file does not exist or cannot be accessed at startup, the system MUST show the panel with its saved geometry, keep the saved filename visible with a clear unavailable warning, and leave the title empty and chart blank.
 - **FR-017**: A saved panel setup MUST remain available after the application or its saved-data store is restarted and when the application is moved together with its associated persistent data.
 - **FR-018**: Each saved panel setup MUST be associated with its owner. The initial release MUST use one default user without requiring login; when multiple users are introduced, each user's setup MUST be isolated from other users' setups.
-- **FR-019**: Only the panel setup fields needed to restore the panel, including the selected file's folder path and filename and its owner's identity, MUST be persisted. The source file contents and derived activity telemetry MUST NOT be included in the saved setup or sent with setup data.
+- **FR-019**: Only the panel setup fields needed to restore the panel, including the selected filename, its owner's identity, and (when available) the file's opaque local-reference identifier, MUST be persisted. The local file reference itself MUST remain in browser-managed storage. An absolute filesystem path, source file contents, and derived activity telemetry MUST NOT be sent with or included in the saved setup.
 - **FR-020**: If a replacement activity fails to load, the system MUST retain and identify the last successfully loaded activity and chart while showing a clear error for the failed selection.
 - **FR-021**: The system MUST consider the setup to have unsaved changes when any saved setup field differs from its last confirmed value. Restoring all fields to their saved values MUST clear the unsaved-changes state.
 - **FR-022**: When the user attempts to close the application with unsaved panel changes, the system MUST ask whether to exit without saving. Confirming MUST discard the changes and close the application; cancelling MUST keep the application open and its current panel state.
@@ -118,8 +118,8 @@ As a cyclist, I want to save my Data Panel setup and restore it in a later sessi
 
 - **Data Area**: The available application viewport that contains the Data Panel.
 - **Data Panel**: The single chart container shown in this feature, with a unique ID, title, position, width, height, selected source, and current session state.
-- **Panel setup**: The confirmed values needed to restore a Data Panel: ID, owner identity, title, position, dimensions, selected file's folder path, and filename.
-- **Data source**: A user-selected activity file, identified by its folder path and filename; the file contents and derived telemetry are separate from the persisted panel setup.
+- **Panel setup**: The confirmed values needed to restore a Data Panel: ID, owner identity, title, position, dimensions, selected file's opaque local-reference identifier, and filename. The local file reference is stored separately in browser-managed storage.
+- **Data source**: A user-selected activity file, identified by a browser-local reference and filename; the file contents and derived telemetry are separate from the persisted panel setup.
 
 ## Success Criteria *(mandatory)*
 
@@ -147,13 +147,15 @@ As a cyclist, I want to save my Data Panel setup and restore it in a later sessi
 - Selecting or changing an activity source is an unsaved panel-setup change. If a replacement fails, the last successful source remains active.
 - A missing or inaccessible source at startup does not overwrite the saved setup automatically; the blank-title behavior applies to the displayed panel until the user makes and confirms a new save.
 - The data source continues to use the activity formats supported by the existing application; this feature does not add a new file format.
-- The user expects a previously granted authorization to permit reopening a source file after application restart. If the file is missing or access is no longer available, the blank-panel behavior in FR-016 applies.
+- The user expects a previously granted authorization to permit reopening a source file after application restart. The application automatically reloads the file only while the local reference, file, and authorization remain available. Permissions may be revoked or require renewed user interaction. Browsers without persistent local file references cannot guarantee source restoration; if the reference, file, or access is unavailable, the blank-panel behavior in FR-016 applies.
+- Local file references belong to the browser profile and origin; moving the Docker image and database volume to another machine does not move those references. The saved panel setup is restored there, but its source may be unavailable until the user selects it again.
 - The initial release has one default user and does not require login. If login is added later, each user has an isolated panel setup.
 - No performance threshold is introduced without measurements on representative files, consistent with the project constitution.
 
 ## Clarifications
 
 - **2026-11-27 — Local file restoration**: The user chose persistent, previously authorized access. The application automatically reloads the file after restart only while that file remains available and the authorization remains valid; the implementation mechanism belongs in `/speckit-plan`.
+- **2026-11-27 — Browser file access**: The user chose to keep the browser application and use a browser-managed local file reference, associated with an opaque identifier and filename in the saved setup. Absolute filesystem paths are not available to browser applications and are not persisted; the source file remains client-side.
 
 ### Session 2026-11-27
 
