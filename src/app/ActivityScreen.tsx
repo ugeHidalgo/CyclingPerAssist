@@ -1,4 +1,4 @@
-import { useReducer, useRef } from "react";
+import { useReducer, useRef, useState } from "react";
 import { parseFitActivity } from "../adapters/fitActivity.ts";
 import { ActivityPicker } from "../components/ActivityPicker.tsx";
 import { ImportError } from "../components/ImportError.tsx";
@@ -34,6 +34,9 @@ export function ActivityScreen() {
     initialImportState,
   );
   const requestId = useRef(0);
+  const [dismissedErrorRequestId, setDismissedErrorRequestId] = useState<
+    number | null
+  >(null);
 
   function handleFileSelected(file: File) {
     const currentRequestId = requestId.current + 1;
@@ -69,28 +72,38 @@ export function ActivityScreen() {
   }
 
   const activity = state.status === "empty" ? null : state.activity;
+  const errorDialogVisible =
+    state.status === "error" &&
+    state.requestId !== dismissedErrorRequestId;
 
   return (
     <main className="activity-screen">
-      <h1>Cycling Performance Assistant</h1>
-      <ActivityPicker onFileSelected={handleFileSelected} />
-      {state.status === "loading" && (
-        <p className="activity-loading" role="status">
-          Validating activity file...
-        </p>
+      <div inert={errorDialogVisible}>
+        <h1>Cycling Performance Assistant</h1>
+        <ActivityPicker onFileSelected={handleFileSelected} />
+        {state.status === "loading" && (
+          <p className="activity-loading" role="status">
+            Validating activity file...
+          </p>
+        )}
+        {activity && (
+          <>
+            <h2 className="activity-name">{activity.fileName}</h2>
+            <SpeedChart activity={activity} />
+            {activity.warnings.map((warning) => (
+              <p className="activity-warning" role="status" key={warning.type}>
+                {describeWarning(warning)}
+              </p>
+            ))}
+          </>
+        )}
+      </div>
+      {state.status === "error" && errorDialogVisible && (
+        <ImportError
+          error={state.error}
+          onDismiss={() => setDismissedErrorRequestId(state.requestId)}
+        />
       )}
-      {activity && (
-        <>
-          <h2 className="activity-name">{activity.fileName}</h2>
-          <SpeedChart activity={activity} />
-          {activity.warnings.map((warning) => (
-            <p className="activity-warning" role="status" key={warning.type}>
-              {describeWarning(warning)}
-            </p>
-          ))}
-        </>
-      )}
-      {state.status === "error" && <ImportError error={state.error} />}
     </main>
   );
 }

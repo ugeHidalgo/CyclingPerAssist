@@ -102,12 +102,20 @@ describe("activity screen accessibility", () => {
     ).toBeGreaterThanOrEqual(4.5);
 
     rejectImport(new ActivityImportError("gpx"));
-    const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent(/only FIT files are supported/i);
+    const dialog = await screen.findByRole("alertdialog", {
+      name: "Activity import failed",
+    });
+    expect(dialog).toHaveAccessibleDescription(
+      /only FIT files are supported/i,
+    );
+    expect(screen.getByRole("button", { name: "Dismiss" })).toHaveFocus();
+    const errorMessage = screen.getByText(
+      /only FIT files are supported/i,
+    );
     expect(
       contrastRatio(
-        getComputedStyle(alert).color,
-        getComputedStyle(alert).backgroundColor,
+        getComputedStyle(errorMessage).color,
+        getComputedStyle(errorMessage).backgroundColor,
       ),
     ).toBeGreaterThanOrEqual(4.5);
   });

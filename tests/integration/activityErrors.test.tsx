@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ActivityScreen } from "../../src/app/ActivityScreen.tsx";
@@ -24,8 +24,16 @@ async function expectFileError(file: File, message: RegExp) {
 
   await user.upload(screen.getByLabelText("Activity file"), file);
 
-  expect(await screen.findByRole("alert")).toHaveTextContent(message);
-  expect(screen.queryByRole("heading", { level: 2 })).not.toBeInTheDocument();
+  const dialog = await screen.findByRole("alertdialog", {
+    name: "Activity import failed",
+  });
+  expect(within(dialog).getByText(message)).toBeInTheDocument();
+  expect(dialog).toHaveAttribute("aria-modal", "true");
+  expect(screen.queryByRole("heading", { level: 2, name: file.name })).not.toBeInTheDocument();
+
+  await user.click(within(dialog).getByRole("button", { name: "Dismiss" }));
+  expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
+  expect(screen.getByLabelText("Activity file")).toHaveFocus();
 }
 
 describe("activity import errors", () => {
@@ -100,14 +108,31 @@ describe("activity import errors", () => {
 
     await user.upload(screen.getByLabelText("Activity file"), gpx);
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(
-      /only FIT files are supported.*choose a FIT file/i,
-    );
+    const dialog = await screen.findByRole("alertdialog", {
+      name: "Activity import failed",
+    });
+    expect(
+      within(dialog).getByText(/only FIT files are supported.*choose a FIT file/i),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { level: 2, name: valid.name }),
     ).toBeInTheDocument();
     expect(
+      screen.getByText("Speed over elapsed time"),
+    ).toBeInTheDocument();
+    expect(
       screen.queryByRole("heading", { level: 2, name: gpx.name }),
     ).not.toBeInTheDocument();
+
+    await user.keyboard("{Tab}");
+    expect(
+      within(dialog).getByRole("button", { name: "Dismiss" }),
+    ).toHaveFocus();
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Activity file")).toHaveFocus();
+    expect(
+      screen.getByText("Speed over elapsed time"),
+    ).toBeInTheDocument();
   });
 });
