@@ -24,9 +24,9 @@ description: "Implementation tasks for the Data Panel Experience feature"
 
 **Purpose**: Establish the .NET API project and development integration required by the planned full-stack application.
 
-- [ ] T001 Create `backend/CyclingPerformanceAssistant.sln`, the .NET 10 API project at `backend/src/CyclingPerformanceAssistant.Api/CyclingPerformanceAssistant.Api.csproj`, and the xUnit project at `backend/tests/CyclingPerformanceAssistant.Api.Tests/CyclingPerformanceAssistant.Api.Tests.csproj`; add both projects to the solution and configure the API launch profile in `backend/src/CyclingPerformanceAssistant.Api/Properties/launchSettings.json` to listen on `http://localhost:5000`.
-- [ ] T002 Add EF Core 10, Npgsql EF Core 10.x, and EF migration tooling references to `backend/src/CyclingPerformanceAssistant.Api/CyclingPerformanceAssistant.Api.csproj`; add xUnit and ASP.NET Core integration-test references to `backend/tests/CyclingPerformanceAssistant.Api.Tests/CyclingPerformanceAssistant.Api.Tests.csproj`.
-- [ ] T003 [P] Configure the Vite development server in `vite.config.ts` to proxy same-origin `/api` requests to `http://localhost:5000`.
+- [X] T001 Create `backend/CyclingPerformanceAssistant.sln`, the .NET 10 API project at `backend/src/CyclingPerformanceAssistant.Api/CyclingPerformanceAssistant.Api.csproj`, and the xUnit project at `backend/tests/CyclingPerformanceAssistant.Api.Tests/CyclingPerformanceAssistant.Api.Tests.csproj`; add both projects to the solution and configure the API launch profile in `backend/src/CyclingPerformanceAssistant.Api/Properties/launchSettings.json` to listen on `http://localhost:5000`.
+- [X] T002 Add EF Core 10, Npgsql EF Core 10.x, and EF migration tooling references to `backend/src/CyclingPerformanceAssistant.Api/CyclingPerformanceAssistant.Api.csproj`; add xUnit and ASP.NET Core integration-test references to `backend/tests/CyclingPerformanceAssistant.Api.Tests/CyclingPerformanceAssistant.Api.Tests.csproj`.
+- [X] T003 [P] Configure the Vite development server in `vite.config.ts` to proxy same-origin `/api` requests to `http://localhost:5000`.
 
 ---
 

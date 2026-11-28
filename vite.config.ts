@@ -8,4 +8,9 @@ export default defineConfig({
       buffer: "buffer/",
     },
   },
+  server: {
+    proxy: {
+      "/api": "http://localhost:5000",
+    },
+  },
 });

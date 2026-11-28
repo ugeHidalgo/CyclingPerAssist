@@ -4,6 +4,7 @@
   "description": "Cycling Performance Assistant project.",
   "main": "index.js",
   "scripts": {
+    "dev": "vite",
     "test": "vitest run",
     "build": "tsc --noEmit && vite build",
     "test:e2e": "playwright test"
