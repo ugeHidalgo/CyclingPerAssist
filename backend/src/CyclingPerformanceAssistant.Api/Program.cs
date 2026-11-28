@@ -5,6 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 var summaries = new[]
 {
@@ -23,6 +25,8 @@ app.MapGet("/weatherforecast", () =>
         .ToArray();
     return forecast;
 });
+
+app.MapFallbackToFile("index.html");
 
 app.Run();
 

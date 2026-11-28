@@ -34,8 +34,8 @@ description: "Implementation tasks for the Data Panel Experience feature"
 
 **Purpose**: Establish the shared client model and application runtime used by all user stories.
 
-- [ ] T004 Define shared Data Area and Data Panel setup types, client source state, and default panel values in `src/domain/panelSetup.ts`; initialize at the Data Area's upper-left with its width and half its height, subject to the 200-by-200-pixel minimum, an empty title, and no selected source.
-- [ ] T005 Configure the single-container runtime in `Dockerfile`, `compose.yaml`, `backend/src/CyclingPerformanceAssistant.Api/Runtime/entrypoint.sh`, and `backend/src/CyclingPerformanceAssistant.Api/Runtime/supervisord.conf`: build the SPA and API, run PostgreSQL 16 and Kestrel under supervision, mount a named `PGDATA` volume, publish only the loopback web port, order startup by database readiness, and shut both processes down gracefully.
+- [X] T004 Define shared Data Area and Data Panel setup types, client source state, and default panel values in `src/domain/panelSetup.ts`; initialize at the Data Area's upper-left with its width and half its height, subject to the 200-by-200-pixel minimum, an empty title, and no selected source.
+- [X] T005 Configure the single-container runtime in `Dockerfile`, `compose.yaml`, `backend/src/CyclingPerformanceAssistant.Api/Runtime/entrypoint.sh`, and `backend/src/CyclingPerformanceAssistant.Api/Runtime/supervisord.conf`: build the SPA and API, run PostgreSQL 16 and Kestrel under supervision, mount a named `PGDATA` volume, publish only the loopback web port, order startup by database readiness, and shut both processes down gracefully.
 
 **Checkpoint**: Shared client types and the planned local application runtime are available before story implementation.
 
