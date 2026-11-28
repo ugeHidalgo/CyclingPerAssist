@@ -29,10 +29,12 @@ curl -f http://127.0.0.1:8080/health/ready
 curl -f http://127.0.0.1:8080/
 ```
 
-The Compose stack contains one application container. The API serves the built frontend, and
-PostgreSQL 16 runs as a supervised process in that same container. PostgreSQL's data directory
-is mounted on a named volume; the database port is not published to the host. To stop the app
-without deleting its setup:
+The Compose stack contains one application container under the service name `frontend`. Within
+that container, Supervisor runs the ASP.NET Core `backend` process (which serves the API and
+built frontend) and PostgreSQL 16. PostgreSQL's data directory is mounted on a named volume; the
+database port is not published to the host. `docker compose ps` shows the Compose service;
+`docker compose exec frontend supervisorctl status` shows the supervised processes. To stop the
+app without deleting its setup:
 
 ```sh
 docker compose down
