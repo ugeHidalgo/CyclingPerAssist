@@ -49,7 +49,7 @@ No GPX import, backend, database, accounts, API integration, or additional metri
 
 | Principle | Design and validation |
 | --- | --- |
-| Local processing and privacy | Browser file reading and processing only; static Docker service never receives activity data; verify network requests and browser storage. |
+| Local processing and privacy | Browser file reading and processing only; application services never receive activity bytes or derived telemetry; verify network requests and browser storage. |
 | Data integrity and units | Never modify the source file; preserve recorded values and explicit units; convert m/s to km/h exactly once and test conversion. |
 | Missing and corrupt telemetry | Document omissions and gaps; never infer zero for missing speed or pause events; reject structurally invalid input before publishing a chart. |
 | Test-first parsing and calculations | Write failing tests first using representative authorized and anonymized FIT examples; cover validation, time, speed and error paths. |

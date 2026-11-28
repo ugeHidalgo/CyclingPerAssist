@@ -23,7 +23,7 @@ export function SpeedChart({ activity }: SpeedChartProps) {
         Speed over elapsed time
       </figcaption>
       <div className="speed-chart__plot">
-        <ResponsiveContainer width="100%" height={320}>
+        <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={timeline}
             margin={{ top: 16, right: 24, bottom: 32, left: 16 }}
