@@ -75,7 +75,7 @@ description: "Implementation tasks for the Data Panel Experience feature"
 
 - [ ] T014 [P] [US2] Add geometry and title-boundary tests in `tests/unit/panelSetup.test.ts` for CSS-pixel movement, 200-pixel minimum dimensions, available-area limits, and the 200-character title limit.
 - [ ] T015 [P] [US2] Extend `tests/integration/accessibility.test.tsx` to cover the required options order, keyboard access to the menu and title editor, and keyboard operation of the available dialogs.
-- [ ] T016 [P] [US2] Add pointer interaction scenarios in `tests/e2e/activity.spec.ts` for visible border affordance, dragging each side and corner, chart adaptation, and clipping when the viewport is smaller than the panel.
+- [ ] T016 [P] [US2] Add pointer interaction scenarios in `tests/e2e/activity.spec.ts` for the visible 3-CSS-pixel black border, dragging each side and corner when resizing is enabled, unchanged panel dimensions when the Data Area clips the panel, chart adaptation, and clipping when the viewport is smaller than the panel.
 
 ### Implementation for User Story 2
 
@@ -83,7 +83,7 @@ description: "Implementation tasks for the Data Panel Experience feature"
 - [ ] T018 [US2] Create the centered title region in `src/components/DataPanel/TitlePanel.tsx` and `src/styles/theme.css`, using the Options Panel's darker surface when read-only and white when editing; preserve the chart during editing, retain the first 200 characters, and display overflow with three dots without changing the saved value.
 - [ ] T019 [US2] Implement the keyboard-operable options menu in `src/components/DataPanel/OptionsPanel.tsx` and connect it through `src/components/DataPanel/DataPanel.tsx` with exactly the specified order: file picker, edit title, Save.
 - [ ] T020 [US2] Implement panel movement from the non-chart title surface in `src/components/DataPanel/DataPanel.tsx` and `src/styles/theme.css`; give title editing priority over dragging and clip out-of-bounds portions when the Data Area is smaller than the panel.
-- [ ] T021 [US2] Implement a continuous, clearly distinguishable resize border with side and corner targets in `src/components/DataPanel/DataPanel.tsx` and `src/styles/theme.css`; left/right drags change width, top/bottom drags change height, corner drags change both, and all resizing respects minimum and available-area limits while the chart adapts.
+- [ ] T021 [US2] Implement a continuous, solid black (`#000000`), 3-CSS-pixel resize border with side and corner targets in `src/components/DataPanel/DataPanel.tsx` and `src/styles/theme.css`; left/right drags change width, top/bottom drags change height, corner drags change both, all resizing respects minimum and available-area limits while the chart adapts, and resizing is disabled while the Data Area is smaller than the panel in either dimension.
 
 **Checkpoint**: The panel can be arranged and identified without saving, and its menu and title interactions meet the specified keyboard requirements.
 
