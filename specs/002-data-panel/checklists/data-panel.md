@@ -10,44 +10,44 @@
 
 ## Requirement Completeness
 
-- [ ] CHK001 Are the supported activity-file formats and compatibility expectations explicit or clearly inherited from the existing application? [Clarity, Spec §FR-008, Assumptions]
-- [ ] CHK002 Are the selected file, browser-local reference, opaque identifier, filename, and activity telemetry clearly distinguished in the requirements? [Completeness, Spec §FR-008, FR-019, Key Entities]
-- [ ] CHK003 Are initial layout requirements complete for Data Areas smaller than the panel's minimum dimensions? [Coverage, Spec §FR-002, FR-011, Edge Cases]
+- [x] CHK001 Are the supported activity-file formats and compatibility expectations explicit or clearly inherited from the existing application? [Clarity, Spec §FR-008, Assumptions]
+- [x] CHK002 Are the selected file, browser-local reference, opaque identifier, filename, and activity telemetry clearly distinguished in the requirements? [Completeness, Spec §FR-008, FR-019, Key Entities]
+- [x] CHK003 Are initial layout requirements complete for Data Areas smaller than the panel's minimum dimensions? [Coverage, Spec §FR-002, FR-011, Edge Cases]
 
 ## Requirement Clarity
 
-- [ ] CHK004 Is “thin” and “clearly distinguishable” defined with objective visual criteria for the panel border? [Measurability, Spec §FR-011, SC-012]
-- [ ] CHK005 Are resize directions, side/corner targets, and minimum/maximum bounds unambiguous when the Data Area clips the panel? [Clarity, Spec §FR-011, Edge Cases]
-- [ ] CHK006 Are keyboard requirements specific enough to describe expected focus and navigation behavior for menus, file selection, editing, and dialogs, while identifying pointer-only actions? [Clarity, Spec §FR-025]
+- [x] CHK004 Is “thin” and “clearly distinguishable” defined with objective visual criteria for the panel border? [Measurability, Spec §FR-011, SC-012]
+- [x] CHK005 Are resize directions, side/corner targets, and minimum/maximum bounds unambiguous when the Data Area clips the panel? [Clarity, Spec §FR-011, Edge Cases]
+- [x] CHK006 Are keyboard requirements specific enough to describe expected focus and navigation behavior for menus, file selection, editing, and dialogs, while identifying pointer-only actions? [Clarity, Spec §FR-025]
 
 ## Requirement Consistency
 
-- [ ] CHK007 Are privacy boundaries consistent across browser file access, API requests, persisted setup, logs, and third-party transmission? [Consistency, Spec §FR-008, FR-019; Plan §Validation Strategy; Constitution §I]
-- [ ] CHK008 Are restoration outcomes consistent across unsupported browser capabilities, missing files, unavailable permissions, and moved browser profiles or application data? [Consistency, Spec §FR-008, FR-015–FR-017, Assumptions]
-- [ ] CHK009 Do declined saves, failed saves, retries, reverted changes, and close-with-unsaved-changes requirements describe one consistent state lifecycle? [Consistency, Spec §FR-014, FR-021–FR-023, User Story 3]
-- [ ] CHK010 Are chart units, derived values, and missing or corrupt telemetry explicitly preserved from the existing activity behavior? [Consistency, Spec §FR-020, Assumptions; Plan §Constitution Check; Constitution §§II–V]
+- [x] CHK007 Are privacy boundaries consistent across browser file access, API requests, persisted setup, logs, and third-party transmission? [Consistency, Spec §FR-008, FR-019; Plan §Validation Strategy; Constitution §I]
+- [x] CHK008 Are restoration outcomes consistent across unsupported browser capabilities, missing files, unavailable permissions, and moved browser profiles or application data? [Consistency, Spec §FR-008, FR-015–FR-017, Assumptions]
+- [x] CHK009 Do declined saves, failed saves, retries, reverted changes, and close-with-unsaved-changes requirements describe one consistent state lifecycle? [Consistency, Spec §FR-014, FR-021–FR-023, User Story 3]
+- [x] CHK010 Are chart units, derived values, and missing or corrupt telemetry explicitly preserved from the existing activity behavior? [Consistency, Spec §FR-020, Assumptions; Plan §Constitution Check; Constitution §§II–V]
 
 ## Acceptance Criteria Quality
 
-- [ ] CHK011 Do the success criteria define reproducible preconditions and observable outcomes for their “100%” claims? [Measurability, Spec §SC-001–SC-012]
+- [x] CHK011 Do the success criteria define reproducible preconditions and observable outcomes for their “100%” claims? [Measurability, Spec §SC-001–SC-012]
 
 ## Scenario Coverage
 
-- [ ] CHK012 Are unsupported, empty, corrupt, or otherwise invalid activity-file outcomes specified with clear, actionable errors and preservation of the last valid chart where applicable? [Coverage, Exception Flow, Spec §FR-020; Constitution §§III, VI]
-- [ ] CHK013 Are startup and recovery scenarios specified for browser-local reference loss, revoked authorization, and session-only file selection? [Coverage, Recovery, Spec §FR-008, FR-015–FR-016, Assumptions]
+- [x] CHK012 Are unsupported, empty, corrupt, or otherwise invalid activity-file outcomes specified with clear, actionable errors and preservation of the last valid chart where applicable? [Coverage, Exception Flow, Spec §FR-020; Constitution §§III, VI]
+- [x] CHK013 Are startup and recovery scenarios specified for browser-local reference loss, revoked authorization, and session-only file selection? [Coverage, Recovery, Spec §FR-008, FR-015–FR-016, Assumptions]
 
 ## Edge Case Coverage
 
-- [ ] CHK014 Is the ordering rule for overlapping saves unambiguous when confirmation order and successful persistence order differ? [Ambiguity, Spec §FR-024, User Story 3]
+- [x] CHK014 Is the ordering rule for overlapping saves unambiguous when confirmation order and successful persistence order differ? [Ambiguity, Spec §FR-024, User Story 3]
 
 ## Non-Functional Requirements
 
-- [ ] CHK015 Are privacy, keyboard accessibility, and explicit error requirements sufficiently complete for the full feature, not only its primary flows? [Coverage, Spec §FR-019, FR-023, FR-025; Constitution §§I, VI]
-- [ ] CHK016 Is the absence of a numeric performance target intentional and tied to measurements on representative activity files and the intended environment? [Assumption, Spec Assumptions; Plan §Technical Context; Constitution §VII]
+- [x] CHK015 Are privacy, keyboard accessibility, and explicit error requirements sufficiently complete for the full feature, not only its primary flows? [Coverage, Spec §FR-019, FR-023, FR-025; Constitution §§I, VI]
+- [x] CHK016 Is the absence of a numeric performance target intentional and tied to measurements on representative activity files and the intended environment? [Assumption, Spec Assumptions; Plan §Technical Context; Constitution §VII]
 
 ## Dependencies & Assumptions
 
-- [ ] CHK017 Are browser support and permission assumptions for persistent file references explicit, including the user-visible fallback when those assumptions do not hold? [Assumption, Spec §FR-008, FR-015–FR-016, Assumptions]
+- [x] CHK017 Are browser support and permission assumptions for persistent file references explicit, including the user-visible fallback when those assumptions do not hold? [Assumption, Spec §FR-008, FR-015–FR-016, Assumptions]
 
 ## Notes
 

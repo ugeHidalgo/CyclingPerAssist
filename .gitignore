@@ -7,3 +7,15 @@ coverage/
 playwright-report/
 test-results/
 .DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/
+
+# .NET build outputs
+bin/
+obj/
+packages/
+*.user
+*.suo

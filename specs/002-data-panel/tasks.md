@@ -24,9 +24,9 @@ description: "Implementation tasks for the Data Panel Experience feature"
 
 **Purpose**: Establish the .NET API project and development integration required by the planned full-stack application.
 
-- [ ] T001 Create `backend/CyclingPerformanceAssistant.sln`, the .NET 10 API project at `backend/src/CyclingPerformanceAssistant.Api/CyclingPerformanceAssistant.Api.csproj`, and the xUnit project at `backend/tests/CyclingPerformanceAssistant.Api.Tests/CyclingPerformanceAssistant.Api.Tests.csproj`; add both projects to the solution and configure the API launch profile in `backend/src/CyclingPerformanceAssistant.Api/Properties/launchSettings.json` to listen on `http://localhost:5000`.
-- [ ] T002 Add EF Core 10, Npgsql EF Core 10.x, and EF migration tooling references to `backend/src/CyclingPerformanceAssistant.Api/CyclingPerformanceAssistant.Api.csproj`; add xUnit and ASP.NET Core integration-test references to `backend/tests/CyclingPerformanceAssistant.Api.Tests/CyclingPerformanceAssistant.Api.Tests.csproj`.
-- [ ] T003 [P] Configure the Vite development server in `vite.config.ts` to proxy same-origin `/api` requests to `http://localhost:5000`.
+- [X] T001 Create `backend/CyclingPerformanceAssistant.sln`, the .NET 10 API project at `backend/src/CyclingPerformanceAssistant.Api/CyclingPerformanceAssistant.Api.csproj`, and the xUnit project at `backend/tests/CyclingPerformanceAssistant.Api.Tests/CyclingPerformanceAssistant.Api.Tests.csproj`; add both projects to the solution and configure the API launch profile in `backend/src/CyclingPerformanceAssistant.Api/Properties/launchSettings.json` to listen on `http://localhost:5000`.
+- [X] T002 Add EF Core 10, Npgsql EF Core 10.x, and EF migration tooling references to `backend/src/CyclingPerformanceAssistant.Api/CyclingPerformanceAssistant.Api.csproj`; add xUnit and ASP.NET Core integration-test references to `backend/tests/CyclingPerformanceAssistant.Api.Tests/CyclingPerformanceAssistant.Api.Tests.csproj`.
+- [X] T003 [P] Configure the Vite development server in `vite.config.ts` to proxy same-origin `/api` requests to `http://localhost:5000`.
 
 ---
 
@@ -34,8 +34,8 @@ description: "Implementation tasks for the Data Panel Experience feature"
 
 **Purpose**: Establish the shared client model and application runtime used by all user stories.
 
-- [ ] T004 Define shared Data Area and Data Panel setup types, client source state, and default panel values in `src/domain/panelSetup.ts`; initialize at the Data Area's upper-left with its width and half its height, subject to the 200-by-200-pixel minimum, an empty title, and no selected source.
-- [ ] T005 Configure the single-container runtime in `Dockerfile`, `compose.yaml`, `backend/src/CyclingPerformanceAssistant.Api/Runtime/entrypoint.sh`, and `backend/src/CyclingPerformanceAssistant.Api/Runtime/supervisord.conf`: build the SPA and API, run PostgreSQL 16 and Kestrel under supervision, mount a named `PGDATA` volume, publish only the loopback web port, order startup by database readiness, and shut both processes down gracefully.
+- [X] T004 Define shared Data Area and Data Panel setup types, client source state, and default panel values in `src/domain/panelSetup.ts`; initialize at the Data Area's upper-left with its width and half its height, subject to the 200-by-200-pixel minimum, an empty title, and no selected source.
+- [X] T005 Configure the single-container runtime in `Dockerfile`, `compose.yaml`, `backend/src/CyclingPerformanceAssistant.Api/Runtime/entrypoint.sh`, and `backend/src/CyclingPerformanceAssistant.Api/Runtime/supervisord.conf`: build the SPA and API, run PostgreSQL 16 and Kestrel under supervision, mount a named `PGDATA` volume, publish only the loopback web port, order startup by database readiness, and shut both processes down gracefully.
 
 **Checkpoint**: Shared client types and the planned local application runtime are available before story implementation.
 
@@ -75,7 +75,7 @@ description: "Implementation tasks for the Data Panel Experience feature"
 
 - [ ] T014 [P] [US2] Add geometry and title-boundary tests in `tests/unit/panelSetup.test.ts` for CSS-pixel movement, 200-pixel minimum dimensions, available-area limits, and the 200-character title limit.
 - [ ] T015 [P] [US2] Extend `tests/integration/accessibility.test.tsx` to cover the required options order, keyboard access to the menu and title editor, and keyboard operation of the available dialogs.
-- [ ] T016 [P] [US2] Add pointer interaction scenarios in `tests/e2e/activity.spec.ts` for visible border affordance, dragging each side and corner, chart adaptation, and clipping when the viewport is smaller than the panel.
+- [ ] T016 [P] [US2] Add pointer interaction scenarios in `tests/e2e/activity.spec.ts` for the visible 3-CSS-pixel black border, dragging each side and corner when resizing is enabled, unchanged panel dimensions when the Data Area clips the panel, chart adaptation, and clipping when the viewport is smaller than the panel.
 
 ### Implementation for User Story 2
 
@@ -83,7 +83,7 @@ description: "Implementation tasks for the Data Panel Experience feature"
 - [ ] T018 [US2] Create the centered title region in `src/components/DataPanel/TitlePanel.tsx` and `src/styles/theme.css`, using the Options Panel's darker surface when read-only and white when editing; preserve the chart during editing, retain the first 200 characters, and display overflow with three dots without changing the saved value.
 - [ ] T019 [US2] Implement the keyboard-operable options menu in `src/components/DataPanel/OptionsPanel.tsx` and connect it through `src/components/DataPanel/DataPanel.tsx` with exactly the specified order: file picker, edit title, Save.
 - [ ] T020 [US2] Implement panel movement from the non-chart title surface in `src/components/DataPanel/DataPanel.tsx` and `src/styles/theme.css`; give title editing priority over dragging and clip out-of-bounds portions when the Data Area is smaller than the panel.
-- [ ] T021 [US2] Implement a continuous, clearly distinguishable resize border with side and corner targets in `src/components/DataPanel/DataPanel.tsx` and `src/styles/theme.css`; left/right drags change width, top/bottom drags change height, corner drags change both, and all resizing respects minimum and available-area limits while the chart adapts.
+- [ ] T021 [US2] Implement a continuous, solid black (`#000000`), 3-CSS-pixel resize border with side and corner targets in `src/components/DataPanel/DataPanel.tsx` and `src/styles/theme.css`; left/right drags change width, top/bottom drags change height, corner drags change both, all resizing respects minimum and available-area limits while the chart adapts, and resizing is disabled while the Data Area is smaller than the panel in either dimension.
 
 **Checkpoint**: The panel can be arranged and identified without saving, and its menu and title interactions meet the specified keyboard requirements.
 
