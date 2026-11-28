@@ -49,9 +49,9 @@ description: "Implementation tasks for the Data Panel Experience feature"
 
 ### Tests for User Story 1
 
-- [ ] T006 [P] [US1] Add reducer tests in `tests/unit/importState.test.ts` that prove a failed replacement retains the last successfully loaded activity and that stale import results cannot replace a newer selection.
-- [ ] T007 [P] [US1] Add integration coverage in `tests/integration/activityLoading.test.tsx` for the blank default panel, successful FIT selection, filename and chart display, and failed-replacement behavior.
-- [ ] T008 [P] [US1] Add browser scenarios in `tests/e2e/activity.spec.ts` for selecting an authorized local FIT file, displaying its filename and chart, and preserving local-only file access.
+- [X] T006 [P] [US1] Add reducer tests in `tests/unit/importState.test.ts` that prove a failed replacement retains the last successfully loaded activity and that stale import results cannot replace a newer selection.
+- [X] T007 [P] [US1] Add integration coverage in `tests/integration/activityLoading.test.tsx` for the blank default panel, successful FIT selection, filename and chart display, and failed-replacement behavior.
+- [X] T008 [P] [US1] Add browser scenarios in `tests/e2e/activity.spec.ts` for selecting an authorized local FIT file, displaying its filename and chart, and preserving local-only file access.
 
 ### Implementation for User Story 1
 
