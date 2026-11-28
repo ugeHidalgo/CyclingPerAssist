@@ -34,6 +34,31 @@ async function dismissImportError(page: import("@playwright/test").Page) {
   await expect(page.getByRole("alertdialog")).toHaveCount(0);
 }
 
+test("starts blank and keeps an authorized local FIT selection local", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  await expect(page.getByText("No file selected")).toBeVisible();
+  await expect(page.locator("figure.speed-chart")).toHaveCount(0);
+
+  const requests: string[] = [];
+  page.on("request", (request) => requests.push(request.url()));
+
+  await selectFile(
+    page,
+    "valid-activity.fit",
+    await fixture("valid-activity.fit"),
+  );
+
+  await expect(
+    page.getByRole("heading", { level: 2, name: "valid-activity.fit" }),
+  ).toBeVisible();
+  await expect(page.locator("figure.speed-chart svg")).toBeVisible();
+  expect(requests).toEqual([]);
+  await expect(page.getByText("Selected file: valid-activity.fit")).toBeVisible();
+});
+
 test("loads a FIT activity and renders the labeled speed chart", async ({
   page,
 }) => {

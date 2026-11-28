@@ -55,9 +55,8 @@ input {
 }
 
 .activity-screen {
-  width: min(100%, 76rem);
+  width: 100%;
   min-height: 100vh;
-  margin: 0 auto;
   padding: clamp(1.25rem, 4vw, 2.5rem);
   color: var(--color-text);
   background-color: var(--color-background);
@@ -68,6 +67,135 @@ input {
   font-size: clamp(1.75rem, 4vw, 2.25rem);
   font-weight: 600;
   line-height: 1.2;
+}
+
+.data-area {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 10rem);
+  overflow: hidden;
+}
+
+.data-panel {
+  position: absolute;
+  display: grid;
+  grid-template-rows: 50px minmax(0, 1fr) 50px;
+  overflow: hidden;
+  border: 3px solid #000000;
+  background: var(--color-surface);
+}
+
+.data-panel__title {
+  display: grid;
+  place-items: center;
+  height: 50px;
+  overflow: hidden;
+  color: #ffffff;
+  background: #4f4f4f;
+}
+
+.data-panel__title-text {
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  color: inherit;
+  font-size: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.data-panel__chart {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  background: var(--color-surface);
+}
+
+.options-panel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 50px;
+  padding: 0 var(--space-2);
+  background: #4f4f4f;
+  color: #ffffff;
+}
+
+.options-panel__controls {
+  position: relative;
+  flex: none;
+}
+
+.options-panel__button {
+  min-height: 2.25rem;
+  border: 1px solid #ffffff;
+  border-radius: var(--radius-control);
+  color: #ffffff;
+  background: #4f4f4f;
+  cursor: pointer;
+}
+
+.options-panel__menu {
+  position: absolute;
+  z-index: 20;
+  bottom: calc(100% + 0.25rem);
+  left: 0;
+  display: grid;
+  width: 13rem;
+  border: 1px solid #000000;
+  background: #ffffff;
+  color: var(--color-text);
+  box-shadow: var(--shadow-surface);
+}
+
+.options-panel__menu-item {
+  display: block;
+  width: 100%;
+  min-height: 2.75rem;
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  border: 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+  background: #ffffff;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.options-panel .activity-picker {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.options-panel .activity-picker label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.options-panel .activity-picker input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.options-panel__filename {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.options-panel__change-trap {
+  display: none;
 }
 
 .activity-name {
@@ -192,12 +320,14 @@ input {
 }
 
 .speed-chart {
-  margin: var(--space-3) 0 0;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
   padding: var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-surface);
+  border: 0;
+  border-radius: 0;
   background-color: var(--color-surface);
-  box-shadow: var(--shadow-surface);
+  box-shadow: none;
 }
 
 .speed-chart__title {
@@ -208,7 +338,8 @@ input {
 
 .speed-chart__plot {
   width: 100%;
-  min-height: 20rem;
+  height: calc(100% - 2.5rem);
+  min-height: 12rem;
 }
 
 .speed-chart .recharts-text {

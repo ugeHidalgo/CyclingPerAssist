@@ -72,11 +72,12 @@ Separate endpoints for create and update add no value for the single setup resou
 
 ### Single-container runtime and durable data
 
-**Decision**: Keep the requested one-container package: ASP.NET Core serves the SPA and API;
-PostgreSQL 16 runs as a second process under a small supervisor. Store `PGDATA` in a named
-Docker volume, keep PostgreSQL off the published host ports, and expose only the loopback-bound
-web/API port. The supervisor must order startup, check database readiness, propagate process
-failure, and provide graceful shutdown.
+**Decision**: Keep the requested one-container package: the Docker Compose service is named
+`frontend`; inside it, Supervisor manages the ASP.NET Core process named `backend` and PostgreSQL
+16 as a second process. ASP.NET Core serves the SPA and API. Store `PGDATA` in a named Docker
+volume, keep PostgreSQL off the published host ports, and expose only the loopback-bound web/API
+port. The supervisor must order startup, check database readiness, propagate process failure,
+and provide graceful shutdown.
 
 **Rationale**: Docker recommends one service per container, but explicitly permits multiple
 processes when lifecycle management is handled. The single-container arrangement is specified

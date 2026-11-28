@@ -110,6 +110,30 @@ describe("import state transitions", () => {
     });
   });
 
+  it("ignores an older failure after a newer selection succeeds", () => {
+    const newerActivity = createActivity("newer.fit");
+    const firstLoading = transitionImportState(initialImportState, {
+      type: "start",
+      requestId: 1,
+    });
+    const latestLoading = transitionImportState(firstLoading, {
+      type: "start",
+      requestId: 2,
+    });
+    const latestReady = transitionImportState(latestLoading, {
+      type: "success",
+      requestId: 2,
+      activity: newerActivity,
+    });
+    const staleFailure = transitionImportState(latestReady, {
+      type: "failure",
+      requestId: 1,
+      error: new Error("Older import failed"),
+    });
+
+    expect(staleFailure).toEqual(latestReady);
+  });
+
   it("discards activity on session disposal and ignores late results", () => {
     const activity = createActivity("ride.fit");
     const ready = createReadyState(activity);

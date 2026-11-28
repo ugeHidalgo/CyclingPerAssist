@@ -66,6 +66,14 @@ afterEach(() => {
 });
 
 describe("activity loading screen", () => {
+  it("starts blank with no selected file or chart", () => {
+    render(<ActivityScreen />);
+
+    expect(screen.getByText("No file selected")).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 2 })).not.toBeInTheDocument();
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+  });
+
   it("accepts one file, shows validation, then identifies the loaded activity", async () => {
     const user = userEvent.setup();
     const file = await loadActivityFile("valid-activity.fit");

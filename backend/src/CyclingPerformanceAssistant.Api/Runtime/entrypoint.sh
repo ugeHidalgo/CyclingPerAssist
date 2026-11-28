@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-if [ "${1:-}" = "api" ]; then
+if [ "${1:-}" = "backend" ]; then
     attempt=0
     until pg_isready -h /var/run/postgresql -U postgres -d postgres; do
         attempt=$((attempt + 1))

@@ -35,7 +35,7 @@ description: "Implementation tasks for the Data Panel Experience feature"
 **Purpose**: Establish the shared client model and application runtime used by all user stories.
 
 - [X] T004 Define shared Data Area and Data Panel setup types, client source state, and default panel values in `src/domain/panelSetup.ts`; initialize at the Data Area's upper-left with its width and half its height, subject to the 200-by-200-pixel minimum, an empty title, and no selected source.
-- [X] T005 Configure the single-container runtime in `Dockerfile`, `compose.yaml`, `backend/src/CyclingPerformanceAssistant.Api/Runtime/entrypoint.sh`, and `backend/src/CyclingPerformanceAssistant.Api/Runtime/supervisord.conf`: build the SPA and API, run PostgreSQL 16 and Kestrel under supervision, mount a named `PGDATA` volume, publish only the loopback web port, order startup by database readiness, and shut both processes down gracefully.
+- [X] T005 Configure the single-container runtime in `Dockerfile`, `compose.yaml`, `backend/src/CyclingPerformanceAssistant.Api/Runtime/entrypoint.sh`, and `backend/src/CyclingPerformanceAssistant.Api/Runtime/supervisord.conf`: build the SPA and API, name the Compose service `frontend` and the supervised ASP.NET Core process `backend`, run PostgreSQL 16 and Kestrel under supervision, mount a named `PGDATA` volume, publish only the loopback web port, order startup by database readiness, and shut both processes down gracefully.
 
 **Checkpoint**: Shared client types and the planned local application runtime are available before story implementation.
 
@@ -49,17 +49,17 @@ description: "Implementation tasks for the Data Panel Experience feature"
 
 ### Tests for User Story 1
 
-- [ ] T006 [P] [US1] Add reducer tests in `tests/unit/importState.test.ts` that prove a failed replacement retains the last successfully loaded activity and that stale import results cannot replace a newer selection.
-- [ ] T007 [P] [US1] Add integration coverage in `tests/integration/activityLoading.test.tsx` for the blank default panel, successful FIT selection, filename and chart display, and failed-replacement behavior.
-- [ ] T008 [P] [US1] Add browser scenarios in `tests/e2e/activity.spec.ts` for selecting an authorized local FIT file, displaying its filename and chart, and preserving local-only file access.
+- [X] T006 [P] [US1] Add reducer tests in `tests/unit/importState.test.ts` that prove a failed replacement retains the last successfully loaded activity and that stale import results cannot replace a newer selection.
+- [X] T007 [P] [US1] Add integration coverage in `tests/integration/activityLoading.test.tsx` for the blank default panel, successful FIT selection, filename and chart display, and failed-replacement behavior.
+- [X] T008 [P] [US1] Add browser scenarios in `tests/e2e/activity.spec.ts` for selecting an authorized local FIT file, displaying its filename and chart, and preserving local-only file access.
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] Create the initial Data Panel structure and render exactly one panel with title, chart, and options regions at the specified default geometry in `src/components/DataPanel/DataPanel.tsx`, `src/components/DataPanel/OptionsPanel.tsx`, `src/app/ActivityScreen.tsx`, and `src/styles/theme.css`.
-- [ ] T010 [US1] Adapt the existing file picker and import flow to open from the panel's options area, parse through the existing FIT adapter without moving or copying the source file, display the selected filename immediately beside the options button and existing warnings, and retain the prior chart on failure in `src/components/ActivityPicker.tsx` and `src/app/ActivityScreen.tsx`.
-- [ ] T011 [US1] Make the existing chart fill the Data Panel's remaining center area and respond to panel-size changes without changing activity measurements in `src/components/SpeedChart.tsx` and `src/styles/theme.css`.
-- [ ] T012 [US1] Implement browser-local storage and retrieval of `FileSystemFileHandle` objects under client-generated opaque UUIDs, with feature detection and explicit storage errors, in `src/storage/activityFileHandles.ts`; never store file bytes.
-- [ ] T013 [US1] Connect file selection to the in-memory panel source state and local handle store in `src/app/ActivityScreen.tsx`, `src/components/ActivityPicker.tsx`, `src/domain/panelSetup.ts`, and `src/storage/activityFileHandles.ts`; retain the session-only file-picker fallback when persistent handles are unsupported.
+- [X] T009 [US1] Create the initial Data Panel structure and render exactly one panel with title, chart, and options regions at the specified default geometry in `src/components/DataPanel/DataPanel.tsx`, `src/components/DataPanel/OptionsPanel.tsx`, `src/app/ActivityScreen.tsx`, and `src/styles/theme.css`.
+- [X] T010 [US1] Adapt the existing file picker and import flow to open from the panel's options area, parse through the existing FIT adapter without moving or copying the source file, display the selected filename immediately beside the options button and existing warnings, and retain the prior chart on failure in `src/components/ActivityPicker.tsx` and `src/app/ActivityScreen.tsx`.
+- [X] T011 [US1] Make the existing chart fill the Data Panel's remaining center area and respond to panel-size changes without changing activity measurements in `src/components/SpeedChart.tsx` and `src/styles/theme.css`.
+- [X] T012 [US1] Implement browser-local storage and retrieval of `FileSystemFileHandle` objects under client-generated opaque UUIDs, with feature detection and explicit storage errors, in `src/storage/activityFileHandles.ts`; never store file bytes.
+- [X] T013 [US1] Connect file selection to the in-memory panel source state and local handle store in `src/app/ActivityScreen.tsx`, `src/components/ActivityPicker.tsx`, `src/domain/panelSetup.ts`, and `src/storage/activityFileHandles.ts`; retain the session-only file-picker fallback when persistent handles are unsupported.
 
 **Checkpoint**: A user can view the existing chart in a default panel, select a local activity, and recover from a failed replacement without losing the last valid chart.
 
@@ -73,7 +73,7 @@ description: "Implementation tasks for the Data Panel Experience feature"
 
 ### Tests for User Story 2
 
-- [ ] T014 [P] [US2] Add geometry and title-boundary tests in `tests/unit/panelSetup.test.ts` for CSS-pixel movement, 200-pixel minimum dimensions, available-area limits, and the 200-character title limit.
+- [X] T014 [P] [US2] Add geometry and title-boundary tests in `tests/unit/panelSetup.test.ts` for CSS-pixel movement, 200-pixel minimum dimensions, available-area limits, and the 200-character title limit.
 - [ ] T015 [P] [US2] Extend `tests/integration/accessibility.test.tsx` to cover the required options order, keyboard access to the menu and title editor, and keyboard operation of the available dialogs.
 - [ ] T016 [P] [US2] Add pointer interaction scenarios in `tests/e2e/activity.spec.ts` for the visible 3-CSS-pixel black border, dragging each side and corner when resizing is enabled, unchanged panel dimensions when the Data Area clips the panel, chart adaptation, and clipping when the viewport is smaller than the panel.
 

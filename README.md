@@ -17,8 +17,10 @@ anonymized examples. Do not add a personal activity file unless its use is autho
 personal location, profile, device, and other identifying data have been removed. See the
 [fixture provenance and expected observations](./tests/fixtures/README.md).
 
-Activity files are read and processed in the browser. The static Docker service serves the app
-only; it does not receive activity bytes or derived telemetry.
+Activity files are read and processed in the browser. Docker Compose names the single application
+service `frontend`; inside that container, Supervisor runs PostgreSQL and the ASP.NET Core
+`backend` process. The backend serves the app and API but does not receive activity bytes or
+derived telemetry.
 
 ## Install and validate
 
@@ -30,29 +32,45 @@ npm test
 npm run build
 ```
 
-## Run the application and browser tests
+## Run the full application with Docker Compose
 
-Start the static app in Docker Compose and confirm it is available:
+From the repository root, build and start the complete application:
 
 ```sh
 docker compose config -q
 docker compose up --build -d
+docker compose ps
 curl -f http://127.0.0.1:8080/
+docker compose exec frontend pg_isready -h /var/run/postgresql -U postgres -d postgres
 ```
 
-Install the Playwright browser once, then run the real-browser scenarios against the running
-Compose service:
+The Compose service is named `frontend`. It builds the frontend assets and the ASP.NET Core
+backend into one application container. Supervisor starts the `backend` process and PostgreSQL 16
+inside that container; PostgreSQL data is kept in the named `postgres-data` volume. The web port
+is available only on the local machine at `127.0.0.1:8080`, and PostgreSQL is not published to
+the host.
+
+To follow application and database logs:
+
+```sh
+docker compose logs -f frontend
+```
+
+Open [http://127.0.0.1:8080](http://127.0.0.1:8080) to use the app. Install the Playwright browser
+once, then run the real-browser scenarios against the running Compose service:
 
 ```sh
 npx playwright install chromium
 npm run test:e2e
 ```
 
-Stop the service when validation is complete:
+Stop the application when validation is complete. This keeps the database volume and its setup:
 
 ```sh
 docker compose down
 ```
+
+Do not add `-v` to this command unless you intend to delete the database volume.
 
 For the detailed scenarios and performance-measurement method, see the
 [feature quickstart](./specs/001-fit-speed-chart/quickstart.md).

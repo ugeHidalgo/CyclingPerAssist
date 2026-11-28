@@ -144,10 +144,12 @@ uses same-origin requests and does not require CORS.
 
 Build the SPA and API in multi-stage build stages. The runtime image contains PostgreSQL 16,
 the ASP.NET Core runtime, and a lightweight process supervisor. The Compose file defines one
-application service and one named volume mounted at PostgreSQL's data directory. The supervisor
-starts PostgreSQL, waits for `pg_isready`, applies the EF migration, and starts Kestrel; its
-readiness check covers both API and database. On shutdown it stops Kestrel and PostgreSQL
-gracefully. Publish only the API port on `127.0.0.1:8080`; do not expose the database port.
+application service named `frontend` and one named volume mounted at PostgreSQL's data directory.
+Supervisor runs the PostgreSQL process and the ASP.NET Core process named `backend`; the latter
+serves both the API and the built SPA. Supervisor starts PostgreSQL, waits for `pg_isready`,
+applies the EF migration, and starts Kestrel; its readiness check covers both backend and
+database. On shutdown it stops Kestrel and PostgreSQL gracefully. Publish only the API port on
+`127.0.0.1:8080`; do not expose the database port.
 
 ## Validation Strategy
 
