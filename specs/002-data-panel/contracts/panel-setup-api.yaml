@@ -1,0 +1,189 @@
+openapi: 3.1.0
+info:
+  title: Cycling Performance Assistant Panel Setup API
+  version: 1.0.0
+  description: >
+    Local same-origin API for the single saved Data Panel setup. V1 uses a server-controlled
+    default owner and never accepts activity bytes, telemetry, browser handles, or filesystem paths.
+servers:
+  - url: /
+paths:
+  /api/v1/panel-setup:
+    get:
+      operationId: getPanelSetup
+      summary: Get the default owner's saved panel setup
+      responses:
+        "200":
+          description: The saved setup.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PanelSetup"
+        "404":
+          description: No setup has been saved yet.
+        "503":
+          description: The setup store is unavailable.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+    put:
+      operationId: savePanelSetup
+      summary: Create or replace the default owner's saved panel setup
+      description: >
+        Creates the setup on the first confirmed save and replaces it on later saves. The
+        last successfully committed write wins. The server assigns ownerId and creates the
+        setup UUID; callers cannot select an owner.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PanelSetupWrite"
+      responses:
+        "200":
+          description: The committed setup.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PanelSetup"
+        "400":
+          description: The setup violates field or layout validation.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "503":
+          description: The setup store is unavailable; the previous setup is unchanged.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+  /health/live:
+    get:
+      operationId: getLiveness
+      summary: Check whether the API process is running
+      responses:
+        "200":
+          description: The API process is alive.
+  /health/ready:
+    get:
+      operationId: getReadiness
+      summary: Check whether the API and PostgreSQL are ready
+      responses:
+        "200":
+          description: The API and setup store are ready.
+        "503":
+          description: The API or setup store is not ready.
+components:
+  schemas:
+    PanelSetupWrite:
+      type: object
+      additionalProperties: false
+      required:
+        - title
+        - x
+        - y
+        - width
+        - height
+        - source
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        x:
+          type: integer
+          minimum: 0
+          description: Horizontal CSS-pixel position relative to the Data Area.
+        y:
+          type: integer
+          minimum: 0
+          description: Vertical CSS-pixel position relative to the Data Area.
+        width:
+          type: integer
+          minimum: 200
+          description: Panel width in CSS pixels.
+        height:
+          type: integer
+          minimum: 200
+          description: Panel height in CSS pixels.
+        source:
+          oneOf:
+            - $ref: "#/components/schemas/SourceReference"
+            - type: "null"
+    PanelSetup:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - ownerId
+        - title
+        - x
+        - y
+        - width
+        - height
+        - source
+      properties:
+        id:
+          type: string
+          format: uuid
+        ownerId:
+          type: string
+          const: default
+          description: Server-controlled v1 owner key.
+        title:
+          type: string
+          maxLength: 200
+        x:
+          type: integer
+          minimum: 0
+          description: Horizontal CSS-pixel position relative to the Data Area.
+        y:
+          type: integer
+          minimum: 0
+          description: Vertical CSS-pixel position relative to the Data Area.
+        width:
+          type: integer
+          minimum: 200
+          description: Panel width in CSS pixels.
+        height:
+          type: integer
+          minimum: 200
+          description: Panel height in CSS pixels.
+        source:
+          oneOf:
+            - $ref: "#/components/schemas/SourceReference"
+            - type: "null"
+    SourceReference:
+      type: object
+      additionalProperties: false
+      required:
+        - fileName
+        - handleId
+      properties:
+        fileName:
+          type: string
+          minLength: 1
+        handleId:
+          oneOf:
+            - type: string
+              format: uuid
+            - type: "null"
+          description: >
+            Opaque key for a browser-local IndexedDB file handle. Null when the browser
+            cannot persist a handle; the filename can still be displayed after restart.
+    ProblemDetails:
+      type: object
+      description: RFC 9457-style error response without file paths or activity data.
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+      additionalProperties: true
